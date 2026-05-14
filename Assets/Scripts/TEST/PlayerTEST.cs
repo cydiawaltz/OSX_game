@@ -14,6 +14,9 @@ public class PlayerTEST : MonoBehaviour
 
     CharacterController controller;
     public int HP ;
+    [SerializeField] GameObject bullet;//prefab インスペクターでアサイン
+    [SerializeField] GameObject enermy;
+    [SerializeField] float bulletSpeed;
 
     void Start()
     {
@@ -56,5 +59,22 @@ public class PlayerTEST : MonoBehaviour
            transform.position.y + 4.0f,
            transform.position.z - 3.0f
        );
+       //以下enermyの移植 式神の操作
+       
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            InjectBullet();
+        }
+    }
+    public void InjectBullet()
+    {
+        //Vector3 lookatXZ = new Vector3(player.transform.position.x,0,player.transform.position.z);
+        //this.transform.LookAt(player.transform,Vector3.zero);
+        
+        GameObject shell = Instantiate(bullet,gameObject.transform.position,Quaternion.identity);
+        Rigidbody rb = shell.GetComponent<Rigidbody>();
+        //rb.AddForce((player.transform.position-transform.forward).normalized*bulletSpeed);
+        rb.AddForce(transform.forward*bulletSpeed);
+        Destroy(shell,8.0f);
     }
 }

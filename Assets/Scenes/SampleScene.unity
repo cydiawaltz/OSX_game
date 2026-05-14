@@ -1219,6 +1219,7 @@ MonoBehaviour:
   isNear: 0
   targetDistance: 8
   distance: 5
+  HP: 0
 --- !u!65 &1143753992
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1535,6 +1536,10 @@ MonoBehaviour:
   x: 0
   y: 0
   z: 0
+  HP: 0
+  bullet: {fileID: 6183497286461135911, guid: 99cb6010c84cd44b6b144ee7fce46790, type: 3}
+  enermy: {fileID: 1143753990}
+  bulletSpeed: 200
 --- !u!143 &1788434779
 CharacterController:
   m_ObjectHideFlags: 0

@@ -66,9 +66,11 @@ public class WindowManagerTest : MonoBehaviour
     public void SetWindowState()
     {
         float pre_Height = -distBetWindow;
-        currentIndex = windows_statestore.Count - (int)(Mathf.Round(player.transform.position.y -0.6f)/ distBetWindow)-1;//超脳筋　もうちょいパフォーマンス落とさずになんとかする方法探したい
-        player.transform.parent = windows[currentIndex].transform;
+        //currentIndex = windows_statestore.Count - (int)(Mathf.Round(player.transform.position.y -0.6f)/ distBetWindow)-1;//超脳筋　もうちょいパフォーマンス落とさずになんとかする方法探したい
+        //player.transform.parent = windows[currentIndex].transform; 
         player_chara.enabled = false;
+        SetPlayerParent();
+        GameObject parent = windows_statestore[currentIndex].gameObject;
         for(int i = windows_statestore.Count-1; i >= 0; i--)
         {
             var window = windows_statestore[i].gameObject.transform.position;
@@ -80,12 +82,24 @@ public class WindowManagerTest : MonoBehaviour
         {
             windows_statestore[i] = windows[i].GetComponent<Window>() as Window;
         }*/
+        Vector3 playerPos =  new Vector3(player.transform.position.x,parent.transform.position.y + 0.5f,player.transform.position.z);
+        player.transform.position = playerPos;
         foreach(Window state in windows_statestore)
         {
             state.isTopMost = false;
         }
         windows_statestore[0].isTopMost = true;
         player_chara.enabled= true;
+    }
+    public void SetPlayerParent()
+    {
+        List<float> distList = new List<float>();
+        for(int i = 0;i<windows_statestore.Count;i++)
+        {
+            distList.Add(Mathf.Abs(windows_statestore[i].gameObject.transform.position.y-player.transform.position.y));
+        }
+        currentIndex = distList.IndexOf(distList.Min());
+        //player.gameObject.transform.parent = windows_statestore[currentIndex].transform;
     }
     public void FocusWindow()//ウインドウをクリックして最前列に
     {
