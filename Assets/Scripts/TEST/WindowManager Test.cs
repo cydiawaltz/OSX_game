@@ -67,7 +67,8 @@ public class WindowManagerTest : MonoBehaviour
     {
         float pre_Height = -distBetWindow;
         //currentIndex = windows_statestore.Count - (int)(Mathf.Round(player.transform.position.y -0.6f)/ distBetWindow)-1;//超脳筋　もうちょいパフォーマンス落とさずになんとかする方法探したい
-        //player.transform.parent = windows[currentIndex].transform; 
+        //player.transform.parent = windows[currentIndex].transform;
+        
         player_chara.enabled = false;
         SetPlayerParent();
         GameObject parent = windows_statestore[currentIndex].gameObject;
