@@ -13,6 +13,7 @@ public class PlayerTEST : MonoBehaviour
     private Vector3 moveDirection = Vector3.zero;
 
     CharacterController controller;
+    public int HP ;
 
     void Start()
     {

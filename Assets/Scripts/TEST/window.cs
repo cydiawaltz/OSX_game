@@ -22,6 +22,7 @@ public class Window : MonoBehaviour
     public WindowState state;
     void Start()
     {
+        OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
         //windowManager = GameObject.FindWithTag("manager").GetComponent<WindowManagerTest>();
         originalWidth = this.transform.localScale.z;
         //ウインドウサイズの取得設定
