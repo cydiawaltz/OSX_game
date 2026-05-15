@@ -11,7 +11,7 @@ public class Window : MonoBehaviour
     public float originalWidth;//回転後俯瞰で
     
     public bool isMinimumWindow;//最小化ウインドウか？(ジニーエフェクトの問題あるんで検討中)
-    public Vector2 originalPosition;//左上の座標(スクリーン)　=> ウインドウ位置を補正しないこと前提
+    //public Vector2 originalPosition;//左上の座標(スクリーン)　=> ウインドウ位置を補正しないこと前提
     public float width,height;//横幅・縦幅 
     float minX,minY,maxX,maxY;//ウインドウ各端
 
