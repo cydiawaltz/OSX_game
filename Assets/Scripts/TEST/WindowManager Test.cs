@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
+using System;
 
 public class WindowManagerTest : MonoBehaviour
 {
@@ -10,15 +12,19 @@ public class WindowManagerTest : MonoBehaviour
     
     [SerializeField] float defaultHeight;//ここは末端に合わせる
     public GameObject[] instantiateObject;//出る可能性のあるウインドウ(Assetに書き出し済みのやつ)
-    [SerializeField] bool IsOverView;
+    public bool IsOverView;
     public int distBetWindow;//ウインドウ間の距離（y）飛び越えられないラインで SetWindowState()んとこに脳筋プレイしてるので整数限定で
     [SerializeField] GameObject player;
     [SerializeField] CharacterController player_chara;
+    [SerializeField] GameObject overViewCamera; 
+    public Action changeVisualState;
+    [SerializeField] List<RectTransform> UIobjects;
 
     //debug
     public bool SetWindow;
     public int currentIndex;
-    [SerializeField] bool isFirstFrame = true;//Update()で処理　Start()で初期化するとパス通んない説
+    public Button changebutton;
+    //[SerializeField] bool isFirstFrame = true;//Update()で処理　Start()で初期化するとパス通んない説
 
     void Start()
     {
@@ -35,6 +41,7 @@ public class WindowManagerTest : MonoBehaviour
             windows_statestore.Add(windows[i].GetComponent<Window>());
         }
         player_chara= player.GetComponent<CharacterController>();
+        IsOverView = true;
     }
 
 
@@ -60,7 +67,23 @@ public class WindowManagerTest : MonoBehaviour
         }
         if(Input.GetMouseButtonDown(0))//左ボタン押下取得
         {
-            FocusWindow();
+            if(IsOverView)
+            {
+                FocusWindow();
+            }
+        }
+    }
+    public void OnClick()
+    {
+        if(IsOverView)
+        {
+            ChangeViewMode(false);
+            overViewCamera.SetActive(false);
+        }
+        else
+        {
+            ChangeViewMode(true);
+            overViewCamera.SetActive(true);
         }
     }
     public void SetWindowState()
@@ -110,9 +133,20 @@ public class WindowManagerTest : MonoBehaviour
         {
             state.Pre_CheckWindowState();
         }
+        for(int i = 0;i<=UIobjects.Count-1;i++)
+        {
+            if(RectTransformUtility.RectangleContainsScreenPoint(UIobjects[i],mousePos))
+            {
+                windows_statestore[0].isTopMost = true;//UIオブジェクトの上にいるときは最前面のウインドウを最前面の状態にする
+                windows_statestore[0].ChangeWindowState();
+                Debug.Log("mouse on UI");
+                return;//UIオブジェクトの上にいるときはウインドウ操作をしない
+            }
+        }
         for(int i = 0;i<=windows_statestore.Count-1;i++)
         {
             bool istarget = windows_statestore[i].CheckWindowState(mousePos);
+            windows_statestore[i].ChangeWindowState();
             if(istarget)
             {
                 Window target = windows_statestore[i];
@@ -122,6 +156,7 @@ public class WindowManagerTest : MonoBehaviour
                 break;
             }
         }
+
     }
     public void ChangeViewMode(bool isOverView)//表示を変更 引数は変更先が俯瞰か否か
     {
@@ -133,6 +168,7 @@ public class WindowManagerTest : MonoBehaviour
         {
             IsOverView = false;
         }
+        changeVisualState?.Invoke();
     }
     public void CreateWindow(int WindowNumber,Vector2 position)
     {

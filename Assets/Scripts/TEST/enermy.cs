@@ -1,56 +1,102 @@
 using UnityEngine;
 using System.Threading.Tasks;
 using DG.Tweening;
-using System.Collections.Generic;
-using System.Linq;
+using UnityEngine.UI;
 
 public class Enermy : MonoBehaviour
 {
     [SerializeField] GameObject bullet;//prefab インスペクターでアサイン
     [SerializeField] GameObject player;
     [SerializeField] float bulletSpeed;
-    [SerializeField] bool isNear;
     [SerializeField] float targetDistance;
     public float distance;
-    public int HP;
+    public int HP;//ユーザーのヒットポイント
+    public int maxHP;//ユーザーの最大ヒットポイント
+    [SerializeField] WindowManagerTest manager;
+    [Header("カメラはインスペクターでアサイン")]
+    [SerializeField] Camera maincam;
+    [SerializeField] Camera overViewCam;
+    public Vector3 offset_main,offset_over;//カメラの位置調整用
+    [SerializeField] RectTransform bar;
+    [SerializeField] Image HPbarFront;
+    [SerializeField] GameObject target;
+
     void Start()
     {
         player = GameObject.FindWithTag("Player");
         ShootingLoop();
+        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+        maxHP = HP;
     }
+
     void Update()
     {
-        distance = Vector3.Distance(player.transform.position,this.transform.position);
-        if(distance <= targetDistance)
+        distance = Vector3.Distance(player.transform.position, this.transform.position);
+        if(!manager.IsOverView)
         {
-            isNear = true;
+            Vector3 screenPos = maincam.WorldToScreenPoint(target.transform.position);
+            bar.position = screenPos+offset_main;
         }
-        else{isNear = false;}
+    }
+    void Switch()
+    {
+        if(manager.IsOverView)
+        {
+            bar.gameObject.SetActive(false);
+            //Vector3 screenPos = overViewCam.WorldToScreenPoint(this.transform.position);
+            //bar.position = screenPos+offset_over;
+        }
+        else
+        {
+            bar.gameObject.SetActive(true);
+            //Vector3 screenPos = maincam.WorldToScreenPoint(this.transform.position);
+            //bar.position = screenPos+offset_main;
+        }
     }
     async void ShootingLoop()
     {
-        while(true)
+        while (true)
         {
-            if(isNear)
+            if (distance <= targetDistance)
             {
                 Vector3 targetPos = player.transform.position;
                 targetPos.y = transform.position.y;
-                transform.DOLookAt(targetPos,0.5f);
+                transform.DOLookAt(targetPos, 0.5f);
                 await Task.Delay(500);
                 InjectBullet();
             }
             await Task.Delay(2000);
         }
     }
+
     public void InjectBullet()
     {
-        //Vector3 lookatXZ = new Vector3(player.transform.position.x,0,player.transform.position.z);
-        //this.transform.LookAt(player.transform,Vector3.zero);
-        
-        GameObject shell = Instantiate(bullet,gameObject.transform.position,Quaternion.identity);
+        GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
         Rigidbody rb = shell.GetComponent<Rigidbody>();
-        //rb.AddForce((player.transform.position-transform.forward).normalized*bulletSpeed);
-        rb.AddForce(transform.forward*bulletSpeed);
-        Destroy(shell,8.0f);
+        rb.AddForce(transform.forward * bulletSpeed);
+        Destroy(shell, 8.0f);
+    }
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("P_shikigami"))
+        {
+            HP -= 1; // ヒットポイントを減らす
+            Destroy(other.gameObject); // 弾を破壊
+            if (HP <= 0)
+            {
+                // GameOver処理
+                Debug.Log("Classic is started(bullet)");
+            }
+        }
+        else if(other.gameObject.CompareTag("Player"))
+        {
+            HP -= 2;
+            if (HP <= 0)
+            {
+                // GameOver処理
+                Debug.Log("Classic is started(player)");
+            }
+        }
+        HPbarFront.fillAmount = (float)HP / maxHP; // HPバーの更新（例: HPが100の場合）
     }
 }

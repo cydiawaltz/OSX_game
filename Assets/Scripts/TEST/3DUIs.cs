@@ -1,29 +1,58 @@
 using UnityEngine;
 
-public class threeDUIs : MonoBehaviour//動かすものの親（つまりウインドウ側に）置く
+public class threeDUIs : MonoBehaviour
 {
     public GameObject Button;
-    bool isUsingButton;//ボタン使うか
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public bool isUsingButton;
+    [SerializeField] bool isLookAt;//LookAt機能を使うか？
+    [SerializeField] GameObject OverViewCamera;
+    [SerializeField] GameObject playerCamera;
+    [SerializeField] WindowManagerTest Manager;
+    public Quaternion origin;
+    int frameCount;
+    
     void Start()
     {
-        if(!(Button == null))
+        isUsingButton = Button != null;
+        if(isLookAt)
         {
-            isUsingButton = true;
+            Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+            Manager.changeVisualState += Switch;
         }
+        origin = this.transform.rotation;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(frameCount == 0&&isLookAt)//偶数fだけ？流石に分からんか
         {
-            if(isUsingButton)
+            if(Manager.IsOverView)
             {
-                
+                //transform.LookAt(OverViewCamera.transform);
+                transform.rotation = origin;
             }
+            else
+            {
+                transform.LookAt(playerCamera.transform);
+            }      
+            frameCount++;
+        }
+        else frameCount = 0;
+        if(frameCount == 10)
+        {
+            transform.LookAt(OverViewCamera.transform);
+            frameCount++;
+        }
+        if (Input.GetMouseButtonDown(0) && isUsingButton)
+        {
+            // ボタンが押されたときの処理をここに記述
+        }
+    }
+    void Switch()
+    {
+        if(isLookAt)
+        {
+            frameCount = 10;
         }
     }
 }

@@ -205,6 +205,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "jp.co.cyberagent.air-sticker": {
+      "version": "https://github.com/CyberAgentGameEntertainment/AirSticker.git?path=/Assets/AirSticker",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b5ca140bfdcc8518133021354810180bf2320329"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

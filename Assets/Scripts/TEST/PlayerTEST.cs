@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerTEST : MonoBehaviour
@@ -8,73 +8,107 @@ public class PlayerTEST : MonoBehaviour
     public float gravity = 20;
     public float speed = 6.0f;
     public Transform cameraTransform;
-    public float x,y,z;
 
     private Vector3 moveDirection = Vector3.zero;
-
     CharacterController controller;
-    public int HP ;
-    [SerializeField] GameObject bullet;//prefab インスペクターでアサイン
-    [SerializeField] GameObject enermy;
+
+    [SerializeField] GameObject bullet;
     [SerializeField] float bulletSpeed;
+    [SerializeField] Vector3 originalPos;
+    [SerializeField] Image HPbarFront;
+    public int HP;//ユーザーのヒットポイント
+    public int maxHP;//ユーザーの最大ヒットポイント
+    [SerializeField] WindowManagerTest manager;
+    [Header("カメラはインスペクターでアサイン")]
+    [SerializeField] Camera maincam;
+    [SerializeField] Camera overViewCam;
+    public Vector3 offset_main,offset_over;//カメラの位置調整用
+    [SerializeField] RectTransform bar;
 
     void Start()
     {
+        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
         controller = GetComponent<CharacterController>();
+        originalPos = cameraTransform.position - transform.position;
+        maxHP = HP;
+        manager.changeVisualState+= Switch;
     }
 
     void Update()
     {
         if (controller.isGrounded)
         {
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 
-                                0,
-                                Input.GetAxis("Vertical"));
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= speed;
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            moveDirection = transform.TransformDirection(moveDirection) * speed;
 
-            x = Input.GetAxis("Horizontal");
-            z = Input.GetAxis("Vertical");
-            moveDirection.z = z * speed;
-            moveDirection.x = x * speed;
-            moveDirection = transform.TransformDirection(moveDirection);
-            
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 moveDirection.y = JumpPower;
             }
         }
-        else
-        {
-            moveDirection.z = z * speed;
-            moveDirection.x = x * speed;
-            moveDirection = transform.TransformDirection(moveDirection);
-        }
-
         moveDirection.y -= gravity * Time.deltaTime;
         controller.Move(moveDirection * Time.deltaTime);
 
         cameraTransform.position = new Vector3(
-           transform.position.x,
-           transform.position.y + 4.0f,
-           transform.position.z - 3.0f
-       );
-       //以下enermyの移植 式神の操作
-       
-        if(Input.GetKeyDown(KeyCode.P))
+            transform.position.x + originalPos.x,
+            transform.position.y + originalPos.y,
+            transform.position.z + originalPos.z
+        );
+
+        if (Input.GetKeyDown(KeyCode.P))
         {
             InjectBullet();
         }
+        if(!manager.IsOverView)
+        {
+            Vector3 screenPos = maincam.WorldToScreenPoint(this.transform.position);
+            bar.position = screenPos+offset_main;
+        }
     }
+    void Switch()
+    {
+        if(manager.IsOverView)
+        {
+            bar.gameObject.SetActive(false);
+            //Vector3 screenPos = overViewCam.WorldToScreenPoint(this.transform.position);
+            //bar.position = screenPos+offset_over;
+        }
+        else
+        {
+            bar.gameObject.SetActive(true);
+            //Vector3 screenPos = maincam.WorldToScreenPoint(this.transform.position);
+            //bar.position = screenPos+offset_main;
+        }
+    }
+
     public void InjectBullet()
     {
-        //Vector3 lookatXZ = new Vector3(player.transform.position.x,0,player.transform.position.z);
-        //this.transform.LookAt(player.transform,Vector3.zero);
-        
-        GameObject shell = Instantiate(bullet,gameObject.transform.position,Quaternion.identity);
+        GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
         Rigidbody rb = shell.GetComponent<Rigidbody>();
-        //rb.AddForce((player.transform.position-transform.forward).normalized*bulletSpeed);
-        rb.AddForce(transform.forward*bulletSpeed);
-        Destroy(shell,8.0f);
+        rb.AddForce(transform.forward * bulletSpeed);
+        Destroy(shell, 8.0f);
+    }
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("E_shikigami"))
+        {
+            HP -= 1; // ヒットポイントを減らす
+            Destroy(other.gameObject); // 弾を破壊
+            if (HP <= 0)
+            {
+                // GameOver処理
+                Debug.Log("Game Over(bullet)");
+            }
+        }
+        else if(other.gameObject.CompareTag("Enemy"))
+        {
+            HP -= 2;
+            if (HP <= 0)
+            {
+                // GameOver処理
+                Debug.Log("Game Over(Enemy)");
+            }
+        }
+        HPbarFront.fillAmount = (float)HP / maxHP; // HPバーの更新（例: HPが100の場合）
     }
 }

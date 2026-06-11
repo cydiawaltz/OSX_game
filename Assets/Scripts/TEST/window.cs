@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
+using System.Collections;
 
 public class Window : MonoBehaviour
 {
     //public WindowManagerTest windowManager;
+    public string AppIndex;//このウインドウが何のアプリか　基本的にはDock順 0:Finder 1:Mail 2:IE 3:iTunes 4:QTPlayer 5:Classic 6:sharlock 7:Trash
     public bool isTopMost;//ステータスバー、各種ボタンのグレーアウトに使用
     public Camera OverViewCamera;//俯瞰かめら
     [SerializeField] public float Rotation{get; private set;}//x軸のみ　ギミック専用　変更はChangeRotation()
@@ -14,19 +17,38 @@ public class Window : MonoBehaviour
     //public Vector2 originalPosition;//左上の座標(スクリーン)　=> ウインドウ位置を補正しないこと前提
     public float width,height;//横幅・縦幅 
     float minX,minY,maxX,maxY;//ウインドウ各端
+    public bool isDraging;//何某かをドラッグ中 スライダー？
+    public Texture[] textures;//ウインドウ状態ごとのテクスチャ　0:通常　1:最前面
+    public List<Renderer> targetRenders;//テクスチャ変更するレンダラー　同じテクスチャにまとめてるので全部に同じの流してもOK
+    //ここからスライダー実装
+    [SerializeField] GameObject slider;//スライダーのポインター
+
+    [SerializeField] GameObject target;
 
     //debug
     public bool isChangeRadius;
     public float Radius;
+    public bool isSkipChangeTexture = false;//テクスチャ不足で変更処理スキップするか　debug用
 
     public WindowState state;
     void Start()
     {
         OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
         //windowManager = GameObject.FindWithTag("manager").GetComponent<WindowManagerTest>();
-        originalWidth = this.transform.localScale.z;
+        if(textures.Length<2)//debug
+        {
+            Debug.LogError("テクスチャ不足 -Window.cs -ObjectName:"+this.gameObject.name);
+            isSkipChangeTexture = true;
+        }
+        if(target == null)
+        {
+            Debug.LogError("target Windowがねぇ! -Window.cs -ObjectName:"+this.gameObject.name);
+            target = this.gameObject;
+        }
+        originalWidth = target.transform.localScale.z;
+        
         //ウインドウサイズの取得設定
-        MeshFilter mf = this.GetComponent<MeshFilter>();
+        MeshFilter mf = target.GetComponent<MeshFilter>();
 
         Vector3[] vertices = mf.mesh.vertices;
 
@@ -39,7 +61,7 @@ public class Window : MonoBehaviour
         foreach (Vector3 v in vertices)
         {
             // ローカル→ワールド
-            Vector3 world = this.transform.TransformPoint(v);
+            Vector3 world = target.transform.TransformPoint(v);
 
             // ワールド→スクリーン
             Vector3 screen = OverViewCamera.WorldToScreenPoint(world);
@@ -60,6 +82,10 @@ public class Window : MonoBehaviour
             Screen.height - maxY
         );
     }
+    IEnumerator SliderDrag()
+    {
+        yield return null;
+    }
     public void Pre_CheckWindowState()//CheckWindowState()呼ぶ前に必ず呼ぶ　初期化用関数
     {
         isTopMost = false;
@@ -77,13 +103,27 @@ public class Window : MonoBehaviour
         
         return isactive;
     }
-    void ChangeWindowState()//ウインドウ状態（テクスチャなど）を変更
+    public void ChangeWindowState()//ウインドウ状態（テクスチャなど）を変更
     {
+        if(isSkipChangeTexture)//debug
+        {
+            return;
+        }
         //ここでテクスチャ云々を変更する
         if(isTopMost)
-        {}
+        {
+            for(int i = 0;i<=targetRenders.Count-1;i++)
+            {
+                targetRenders[i].material.mainTexture = textures[0];//最前面のテクスチャ
+            }
+        }
         else
-        {}
+        {
+            for(int i = 0;i<=targetRenders.Count-1;i++)
+            {
+                targetRenders[i].material.mainTexture = textures[1];//最前面のテクスチャ
+            }
+        }
     }
     void Update()
     {
@@ -96,7 +136,7 @@ public class Window : MonoBehaviour
     public void ChangeRotation(float radius)
     {
         Rotation = radius;
-        this.gameObject.transform.rotation = Quaternion.Euler(radius,0,0);
+        target.gameObject.transform.rotation = Quaternion.Euler(radius,0,0);
         Vector3 scale = transform.localScale;
         scale.z = originalWidth / Mathf.Cos(radius*Mathf.Deg2Rad);
         transform.localScale = scale;

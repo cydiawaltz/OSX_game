@@ -25,6 +25,7 @@ public class Dock : MonoBehaviour
         xScale = this.gameObject.transform.localScale.x;//半分
         Dock_render = GetComponent<Renderer>();
         icons_render = icons.ConvertAll(icon => icon.GetComponent<Renderer>()); // icons_render を一括初期化
+        AlignIcons();//<=これAI製なので真っ先にバグ疑
     }
 
     void Update()
@@ -67,6 +68,32 @@ public class Dock : MonoBehaviour
 
         sequence.Play();
     }
+    public void AlignIcons()
+{
+    float dockCenter = Dock_render.bounds.center.x;
+    float width = Dock_render.bounds.size.x;
+
+    float totalIconSize =
+        icons_render.Sum(renderer => renderer.bounds.size.x);
+
+    float totalMargin = width - totalIconSize;
+    float margin = totalMargin / (icons.Count + 1);
+
+    float currentPos = dockCenter - width / 2;
+
+    foreach (var (icon, renderer) in icons.Zip(
+                 icons_render,
+                 (icon, renderer) => (icon, renderer)))
+    {
+        currentPos += margin + renderer.bounds.size.x / 2f;
+
+        Vector3 pos = icon.transform.position;
+        pos.x = currentPos;
+        icon.transform.position = pos;
+
+        currentPos += renderer.bounds.size.x / 2f;
+    }
+}
 
     void SortIcons()
     {

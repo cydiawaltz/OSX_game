@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - OverViewCamera
+  - Manager
+  - E_shikigami
+  - P_shikigami
+  - Enemy
   layers:
   - Default
   - TransparentFX
