@@ -25,6 +25,9 @@ public class Icon : MonoBehaviour//iconにアタッチ
     public float width,height;//横幅・縦幅 
     float minX,minY,maxX,maxY;//ウインドウ各端
     [SerializeField] GameObject status;//アイコン下の三角
+    [SerializeField] bool isText;
+    [SerializeField] Renderer Text;
+    [SerializeField] float fadeTime;
 
     void Start()
     {
@@ -33,6 +36,15 @@ public class Icon : MonoBehaviour//iconにアタッチ
         OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
         //windowManager = GameObject.FindWithTag("manager").GetComponent<WindowManagerTest>();
         originalWidth = this.transform.localScale.z;
+        try
+        {
+            transform.GetChild(0).GetComponent<Renderer>();
+            Text.material.color = new Color(Text.material.color.r,Text.material.color.g,Text.material.color.b,0);
+        }
+        catch
+        {
+            Debug.LogError("テキストの子オブジェクトがねぇ,"+this.gameObject.name);
+        }
         //ウインドウサイズの取得設定
         MeshFilter mf = this.GetComponent<MeshFilter>();
 
@@ -70,19 +82,39 @@ public class Icon : MonoBehaviour//iconにアタッチ
     }
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            StartCoroutine(ClickButtonDown(Input.mousePosition));
-        }
-    }
-    IEnumerator ClickButtonDown(Vector3 mousePos)
-    {
-        if(allowStarting)
-        {
-            bool isactive = mousePos.x >= minX &&
+        var mousePos = Input.mousePosition;
+        bool isactive = mousePos.x >= minX &&
                         mousePos.x <= maxX &&
                         mousePos.y >= minY &&
                         mousePos.y <= maxY;//ボタンの内側判定
+        if(Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(ClickButtonDown(isactive));
+        }
+        else
+        {
+            if(isactive)
+            {
+                if(!isText)
+                {
+                    FadeInText(); //マウスオーバー時 
+                }
+            }
+            else
+            {
+                if(isText)
+                {
+                    FadeOutText();
+                }
+            }
+        }
+
+    }
+    IEnumerator ClickButtonDown(bool isactive)
+    {
+        if(allowStarting)
+        {
+            
         if(isactive)
         {
             //ボタン押下時
@@ -90,7 +122,19 @@ public class Icon : MonoBehaviour//iconにアタッチ
         }
         }
     }
-
+    void FadeInText()
+    {
+        isText = true;
+        var sequence = DOTween.Sequence();
+        sequence.Append(Text.material.DOFade(1.0f,fadeTime));
+        sequence.Play();
+    }
+    void FadeOutText()
+    {
+        var sequence = DOTween.Sequence();
+        sequence.Append(Text.material.DOFade(0.0f,fadeTime));
+        sequence.Play().OnComplete(()=>isText = false);
+    }
     IEnumerator DoBounce()
     {
         if(isEndlessBound)

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2568999590451286364}
   - component: {fileID: 7236525233878208338}
   - component: {fileID: 1231803438377184829}
+  - component: {fileID: -777277355597328322}
   - component: {fileID: 7429261523213846224}
   - component: {fileID: 638203144474810401}
   m_Layer: 0
@@ -88,6 +89,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-777277355597328322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183497286461135911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 987c7027d896a4de6b35826f8e7f9da9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  isJumping: 0
+  interval: 2
+  forwardForce: 4
+  jumpForce: 5
+  rb: {fileID: 0}
+  velocityY: 0
+  old_velocityY: 0
+  destroyObject: {fileID: 6264687091251239799, guid: 57b4e11f3d1af414288e690b9a392435, type: 3}
 --- !u!135 &7429261523213846224
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -117,7 +139,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6183497286461135911}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 300
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

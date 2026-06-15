@@ -20,6 +20,7 @@ public class Enermy : MonoBehaviour
     [SerializeField] RectTransform bar;
     [SerializeField] Image HPbarFront;
     [SerializeField] GameObject target;
+    [SerializeField] float destroyTime;
 
     void Start()
     {
@@ -74,7 +75,9 @@ public class Enermy : MonoBehaviour
         GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
         Rigidbody rb = shell.GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * bulletSpeed);
-        Destroy(shell, 8.0f);
+        shell.GetComponent<Enermy_shikigami>().pCamera = maincam.gameObject;
+        shell.GetComponent<Enermy_shikigami>().oCamera = overViewCam.gameObject;
+        Destroy(shell, destroyTime);
     }
     void OnCollisionEnter(Collision other)
     {

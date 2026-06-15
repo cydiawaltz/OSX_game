@@ -37,12 +37,12 @@ public class Window : MonoBehaviour
         //windowManager = GameObject.FindWithTag("manager").GetComponent<WindowManagerTest>();
         if(textures.Length<2)//debug
         {
-            Debug.LogError("テクスチャ不足 -Window.cs -ObjectName:"+this.gameObject.name);
+            Debug.Log("テクスチャ不足 -Window.cs -ObjectName:"+this.gameObject.name);
             isSkipChangeTexture = true;
         }
         if(target == null)
         {
-            Debug.LogError("target Windowがねぇ! -Window.cs -ObjectName:"+this.gameObject.name);
+            Debug.Log("target Windowがねぇ! -Window.cs -ObjectName:"+this.gameObject.name);
             target = this.gameObject;
         }
         originalWidth = target.transform.localScale.z;
