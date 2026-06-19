@@ -28,6 +28,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
     [SerializeField] bool isText;
     [SerializeField] Renderer Text;
     [SerializeField] float fadeTime;
+    public bool isUsingExp;//説明テキストを出すか？
 
     void Start()
     {
@@ -38,8 +39,11 @@ public class Icon : MonoBehaviour//iconにアタッチ
         originalWidth = this.transform.localScale.z;
         try
         {
-            transform.GetChild(0).GetComponent<Renderer>();
-            Text.material.color = new Color(Text.material.color.r,Text.material.color.g,Text.material.color.b,0);
+            if(isUsingExp)
+            {
+                Text.material.color = new Color(Text.material.color.r,Text.material.color.g,Text.material.color.b,0);
+            }
+            //transform.GetChild(0).GetComponent<Renderer>();
         }
         catch
         {
@@ -91,7 +95,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
         {
             StartCoroutine(ClickButtonDown(isactive));
         }
-        else
+        else if(isUsingExp)
         {
             if(isactive)
             {
