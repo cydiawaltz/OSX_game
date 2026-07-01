@@ -91,7 +91,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
                         mousePos.x <= maxX &&
                         mousePos.y >= minY &&
                         mousePos.y <= maxY;//ボタンの内側判定
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0)&&!isAnimation)
         {
             StartCoroutine(ClickButtonDown(isactive));
         }
@@ -128,25 +128,27 @@ public class Icon : MonoBehaviour//iconにアタッチ
     }
     void FadeInText()
     {
-        isText = true;
+        isText = true; isAnimation = true;
         var sequence = DOTween.Sequence();
         sequence.Append(Text.material.DOFade(1.0f,fadeTime));
-        sequence.Play();
+        sequence.Play().OnComplete(()=>isAnimation = false);
     }
     void FadeOutText()
     {
+        isAnimation = true;
         var sequence = DOTween.Sequence();
         sequence.Append(Text.material.DOFade(0.0f,fadeTime));
-        sequence.Play().OnComplete(()=>isText = false);
+        sequence.Play().OnComplete(()=>{isText = false; isAnimation = false;});
     }
     IEnumerator DoBounce()
     {
+        isAnimation = true;
         if(isEndlessBound)
         {
             while(true)
             {
                 yield return StartCoroutine(Bounce());
-                if(!isEndlessBound) break;
+                if(!isEndlessBound)  break;
             }
         }
         else
@@ -156,6 +158,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
                 yield return StartCoroutine(Bounce());
             }
         }
+        isAnimation = false;
     }
 
     IEnumerator Bounce()

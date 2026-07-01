@@ -9,6 +9,7 @@ public class Window : MonoBehaviour
     //public WindowManagerTest windowManager;
     public string AppIndex;//このウインドウが何のアプリか　基本的にはDock順 0:Finder 1:Mail 2:IE 3:iTunes 4:QTPlayer 5:Classic 6:sharlock 7:Trash
     public bool isTopMost;//ステータスバー、各種ボタンのグレーアウトに使用
+    public bool oldTopMost;
     public Camera OverViewCamera;//俯瞰かめら
     [SerializeField] public float Rotation{get; private set;}//x軸のみ　ギミック専用　変更はChangeRotation()
     public float originalWidth;//回転後俯瞰で
@@ -30,7 +31,7 @@ public class Window : MonoBehaviour
     public float Radius;
     public bool isSkipChangeTexture = false;//テクスチャ不足で変更処理スキップするか　debug用
 
-    public WindowState state;
+    //public WindowState state;
     void Start()
     {
         OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
@@ -116,13 +117,18 @@ public class Window : MonoBehaviour
             {
                 targetRenders[i].material.mainTexture = textures[0];//最前面のテクスチャ
             }
+            oldTopMost = true;
         }
         else
         {
-            for(int i = 0;i<=targetRenders.Count-1;i++)
+            if(!oldTopMost)
             {
-                targetRenders[i].material.mainTexture = textures[1];//最前面のテクスチャ
+                for(int i = 0;i<=targetRenders.Count-1;i++)
+                {
+                    targetRenders[i].material.mainTexture = textures[1];//最前面のテクスチャ
+                }
             }
+            oldTopMost = false;
         }
     }
     void Update()

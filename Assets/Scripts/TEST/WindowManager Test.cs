@@ -18,7 +18,13 @@ public class WindowManagerTest : MonoBehaviour
     [SerializeField] CharacterController player_chara;
     [SerializeField] GameObject overViewCamera; 
     public Action changeVisualState;
+    public Action changeIndexState;
     [SerializeField] List<RectTransform> UIobjects;
+    public int AppIndex;
+    /*
+    >>10.1
+    0:Finder 1:iTunes 2:IE 3:Preview 4:Sherlock 5:システム環境設定 6:Stickies 7:TextEdit 8:Classic startup 9:OS9(SimpleText)
+    */
 
     //debug
     public bool SetWindow;
@@ -156,7 +162,8 @@ public class WindowManagerTest : MonoBehaviour
                 break;
             }
         }
-
+        //暫定
+        changeIndexState.Invoke();
     }
     public void ChangeViewMode(bool isOverView)//表示を変更 引数は変更先が俯瞰か否か
     {
