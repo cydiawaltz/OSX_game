@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.9">
+<dict>
+	<key>dock</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>1011</integer>
+			<key>name</key>
+			<string>Turn Magnification On</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1012</integer>
+			<key>name</key>
+			<string>Turn Magnification Off</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1009</integer>
+			<key>name</key>
+			<string>Turn Hiding On</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1010</integer>
+			<key>name</key>
+			<string>Turn Hiding Off</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1013</integer>
+			<key>name</key>
+			<string>Position on screen</string>
+			<key>sub</key>
+			<array>
+				<dict>
+					<key>command</key>
+					<integer>1018</integer>
+					<key>name</key>
+					<string>Left</string>
+				</dict>
+				<dict>
+					<key>command</key>
+					<integer>1017</integer>
+					<key>name</key>
+					<string>Bottom</string>
+				</dict>
+				<dict>
+					<key>command</key>
+					<integer>1019</integer>
+					<key>name</key>
+					<string>Right</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1029</integer>
+			<key>name</key>
+			<string>Minimize using</string>
+			<key>sub</key>
+			<array>
+				<dict>
+					<key>command</key>
+					<integer>1030</integer>
+					<key>name</key>
+					<string>Genie Effect</string>
+				</dict>
+				<dict>
+					<key>command</key>
+					<integer>1031</integer>
+					<key>name</key>
+					<string>Scale Effect</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>separator</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1015</integer>
+			<key>name</key>
+			<string>Dock Preferences…</string>
+		</dict>
+	</array>
+	<key>file</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>1005</integer>
+			<key>name</key>
+			<string>Show In Finder</string>
+		</dict>
+	</array>
+	<key>finder-quit</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>2002</integer>
+			<key>enabled</key>
+			<false/>
+			<key>name</key>
+			<string>Finder Not Running</string>
+		</dict>
+	</array>
+	<key>finder-running</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>2002</integer>
+			<key>enabled</key>
+			<false/>
+			<key>name</key>
+			<string>Application Not Responding</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>2001</integer>
+			<key>enabled</key>
+			<false/>
+			<key>name</key>
+			<string>No Windows</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>2000</integer>
+			<key>separator</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1003</integer>
+			<key>dynamic</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Quit</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1024</integer>
+			<key>dynamic</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>Force Quit</string>
+		</dict>
+	</array>
+	<key>folder</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>2000</integer>
+			<key>separator</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1005</integer>
+			<key>name</key>
+			<string>Show In Finder</string>
+		</dict>
+	</array>
+	<key>minwindow</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>2003</integer>
+			<key>enabled</key>
+			<false/>
+			<key>name</key>
+			<string>Minimized Window</string>
+		</dict>
+	</array>
+	<key>process</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>2002</integer>
+			<key>enabled</key>
+			<false/>
+			<key>name</key>
+			<string>Application Not Responding</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>2000</integer>
+			<key>separator</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1002</integer>
+			<key>name</key>
+			<string>Keep In Dock</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1005</integer>
+			<key>name</key>
+			<string>Show In Finder</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1003</integer>
+			<key>dynamic</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Quit</string>
+		</dict>
+		<dict>
+			<key>command</key>
+			<integer>1024</integer>
+			<key>dynamic</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>Force Quit</string>
+		</dict>
+	</array>
+	<key>trash</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>1001</integer>
+			<key>name</key>
+			<string>Empty Trash</string>
+		</dict>
+	</array>
+	<key>url</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<integer>2002</integer>
+			<key>enabled</key>
+			<false/>
+			<key>name</key>
+			<string>URL</string>
+		</dict>
+	</array>
+</dict>
+</plist>

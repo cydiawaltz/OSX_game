@@ -24,6 +24,7 @@ public class WindowManagerTest : MonoBehaviour
     /*
     >>10.1
     0:Finder 1:iTunes 2:IE 3:Preview 4:Sherlock 5:システム環境設定 6:Stickies 7:TextEdit 8:Classic startup 9:OS9(SimpleText)
+    >>
     */
 
     //debug

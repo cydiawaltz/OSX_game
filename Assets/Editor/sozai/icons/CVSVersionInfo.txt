@@ -1,0 +1,5 @@
+# Created and modified by checkpoint; do not edit
+# $Id: CVSVersionInfo.txt,v 1.24 2000/08/15 22:20:22 runov Exp $
+# $Name: Stickies-26 $
+ProjectName: Stickies
+ProjectVersion: 19~1
