@@ -7,7 +7,7 @@ using System.Collections;
 public class Window : MonoBehaviour
 {
     //public WindowManagerTest windowManager;
-    public string AppIndex;//このウインドウが何のアプリか　基本的にはDock順 0:Finder 1:Mail 2:IE 3:iTunes 4:QTPlayer 5:Classic 6:sharlock 7:Trash
+    public int AppIndex;//このウインドウが何のアプリか　基本的にはDock順 WindowManagerTestのAppIndex
     public bool isTopMost;//ステータスバー、各種ボタンのグレーアウトに使用
     public bool oldTopMost;
     public Camera OverViewCamera;//俯瞰かめら

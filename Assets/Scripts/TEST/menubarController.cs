@@ -8,18 +8,23 @@ public class menubarController : MonoBehaviour
     [SerializeField] bool isInSpace;//
     [SerializeField] bool isEnable;//メニューバーが有効状態か
     [SerializeField] WindowManagerTest manager;
+    [SerializeField] int AppIndex;
     void Start()
     {
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>(); 
-        manager.changeIndexState += ChangeIndex;  
+        manager.changeIndexState += ChangeIndex;
+        for(int i = 0; i < MenubarBases.Count; i++)
+        {
+            if(!(i == 0)) MenubarBases[i].SetActive(true);
+            else MenubarBases[i].SetActive(false);
+        }
         ChangeIndex();
     }
     void ChangeIndex()
     {
-        foreach(GameObject menu in MenubarBases)
-        {
-            menu.SetActive(false);
-        }
+        //oldspeedと同じ形 最後に代入
+        MenubarBases[AppIndex].SetActive(false);
         MenubarBases[manager.AppIndex].SetActive(true);
+        AppIndex = manager.AppIndex;
     }
 }

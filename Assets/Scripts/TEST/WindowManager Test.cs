@@ -160,6 +160,7 @@ public class WindowManagerTest : MonoBehaviour
                 windows_statestore.RemoveAt(i);
                 windows_statestore.Insert(0,target);
                 SetWindowState();
+                AppIndex = target.AppIndex;
                 break;
             }
         }
