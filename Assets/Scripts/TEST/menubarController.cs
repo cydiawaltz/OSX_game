@@ -15,8 +15,8 @@ public class menubarController : MonoBehaviour
         manager.changeIndexState += ChangeIndex;
         for(int i = 0; i < MenubarBases.Count; i++)
         {
-            if(!(i == 0)) MenubarBases[i].SetActive(true);
-            else MenubarBases[i].SetActive(false);
+            if(!(i == 0)) MenubarBases[i].SetActive(false);
+            else MenubarBases[i].SetActive(true);
         }
         ChangeIndex();
     }

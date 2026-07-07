@@ -4,51 +4,102 @@ using System.Collections.Generic;
 public class menubar : MonoBehaviour//子側　
 {
     public bool isOS9;//OS9のメニューバーか否か 判定はGetMouseUpで消す
-    public bool isMenubarEnable;//メニューバーが有効状態か
+    public bool isMenubarEnable = false;//メニューバーが有効状態か
     public List<Renderer> elements;//左から順にアサイン プルダウンした時のやつ
     public List<MenubarTypeSet> elementsHit = new List<MenubarTypeSet>();
     [SerializeField] Camera OverViewCamera;
+    WindowManagerTest manager;
     public int enableIndex;
+    //debug
+    public int frameCount;
+    
     
     void Start()
     {
-        GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
         OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
+        manager.ClickDown += ClickDown;
         for(int i = 0; i < elements.Count; i++)
         {
             elementsHit.Add(GetRectAngle(elements[i].gameObject));
+            Debug.Log("メニューバーの長方形"+i);
         }
         foreach(var element in elements)
         {
             element.enabled = false;//プルダウンした時だけ入れる感じで
         }
     }
-    void Update()
+    void ClickDown()
     {
         var mousePos = Input.mousePosition;
-        if(Input.GetMouseButtonDown(0))//開ける時
-        {
+        
+            Debug.Log("クリック(menubar.cs)"+gameObject.name);
             if(isMenubarEnable)
             {
-                ChangeElementsState(enableIndex,enableIndex,false);
-                isMenubarEnable = false;
+                Debug.Log("メニュー閉判定前");
+                    if(mousePos.x >= elementsHit[enableIndex].minX && mousePos.x <= elementsHit[enableIndex].maxX && mousePos.y >= elementsHit[enableIndex].minY && mousePos.y <= elementsHit[enableIndex].maxY)
+                    {
+                        CloseElements(enableIndex);
+                        isMenubarEnable = false;
+                        Debug.Log("メニューを閉じる");
+                    }
             }
             else
             {
+                Debug.Log("メニュー開判定前");
                 for(int i = 0; i < elementsHit.Count; i++)
                 {
+                    Debug.Log("接触判定前"+i);
                     if(mousePos.x >= elementsHit[i].minX && mousePos.x <= elementsHit[i].maxX && mousePos.y >= elementsHit[i].minY && mousePos.y <= elementsHit[i].maxY)
                     {
-                        ChangeElementsState(null,i,false);
+                        OpenElements(i);
                         enableIndex = i;
                         isMenubarEnable = true;
+                        Debug.Log("メニューを開く");
                         break;
                     }
                 }
             }
-        }
+        
+    }
+    void Update()
+    {
+        frameCount++;
+        var mousePos = Input.mousePosition;
+        //clickdownの中身はここにあった
+        /*if(Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("クリック(menubar.cs)"+gameObject.name);
+            if(isMenubarEnable)
+            {
+                Debug.Log("メニュー閉判定前");
+                    if(mousePos.x >= elementsHit[enableIndex].minX && mousePos.x <= elementsHit[enableIndex].maxX && mousePos.y >= elementsHit[enableIndex].minY && mousePos.y <= elementsHit[enableIndex].maxY)
+                    {
+                        CloseElements(enableIndex);
+                        isMenubarEnable = false;
+                        Debug.Log("メニューを閉じる");
+                    }
+            }
+            else
+            {
+                Debug.Log("メニュー開判定前");
+                for(int i = 0; i < elementsHit.Count; i++)
+                {
+                    Debug.Log("接触判定前"+i);
+                    if(mousePos.x >= elementsHit[i].minX && mousePos.x <= elementsHit[i].maxX && mousePos.y >= elementsHit[i].minY && mousePos.y <= elementsHit[i].maxY)
+                    {
+                        OpenElements(i);
+                        enableIndex = i;
+                        isMenubarEnable = true;
+                        Debug.Log("メニューを開く");
+                        break;
+                    }
+                }
+            }
+        }*/
         if(Input.GetMouseButtonUp(0))//OS9のメニューバーはクリック終了で消える+1fラグあり？
         {
+            Debug.Log("マウスup(OS9)");
             if(isOS9)
             {
                 isMenubarEnable = false;
@@ -67,29 +118,27 @@ public class menubar : MonoBehaviour//子側　
             }
             if(oldIndex != enableIndex)
             {
-                ChangeElementsState(oldIndex,enableIndex,false);
+                ChangeElementsState(oldIndex,enableIndex);
             }
         }
     }
-    void ChangeElementsState(int? oldIndex,int newIndex,bool newWindow)
+    void OpenElements(int index)
     {
-        if(oldIndex == null&&newWindow)//新規に開く時
-        {
-            elements[newIndex].enabled = true;
-            //詳細メニューの表示処理
-        }
-        if(oldIndex == null&&!newWindow)//閉じる時
-        {
-            elements[newIndex].enabled = false;
-            //詳細メニューの非表示処理
-        }
-        else
-        {
-            int oldIndexValue = oldIndex.Value;
-            elements[oldIndexValue].enabled = false;
-            elements[newIndex].enabled = true;
-        }
-        
+        elements[index].enabled = true;
+        //詳細メニューの表示処理
+        Debug.Log("open");
+    }
+    void CloseElements(int index)
+    {
+        elements[index].enabled = false;
+        //詳細メニューの非表示処理
+        Debug.Log("close");
+    }
+    void ChangeElementsState(int oldIndex,int newIndex)
+    {
+        elements[oldIndex].enabled = false;
+        elements[newIndex].enabled = true;
+        Debug.Log("state change");
     }
     MenubarTypeSet GetRectAngle(GameObject target)
     {
@@ -129,6 +178,14 @@ public class menubar : MonoBehaviour//子側　
             Screen.height - result.maxY
         );
         return result;
+    }
+    void OnDisable()
+    {
+        isMenubarEnable = false;
+        for(int i = 0; i < elements.Count; i++)
+        {
+            elements[i].enabled = false;
+        }
     }
 }
 

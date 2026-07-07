@@ -13,14 +13,18 @@ public class WindowManagerTest : MonoBehaviour
     [SerializeField] float defaultHeight;//ここは末端に合わせる
     public GameObject[] instantiateObject;//出る可能性のあるウインドウ(Assetに書き出し済みのやつ)
     public bool IsOverView;
-    public int distBetWindow;//ウインドウ間の距離（y）飛び越えられないラインで SetWindowState()んとこに脳筋プレイしてるので整数限定で
+    public float distBetWindow;//ウインドウ間の距離（y）飛び越えられないラインで SetWindowState()んとこに脳筋プレイしてるので整数限定で
     [SerializeField] GameObject player;
     [SerializeField] CharacterController player_chara;
     [SerializeField] GameObject overViewCamera; 
+    [SerializeField] GameObject playerCamera;
     public Action changeVisualState;
     public Action changeIndexState;
+    public Action ClickDown;//menubar.csのクリックバグはフレーム数の不一致らしいのでこれで管理
     [SerializeField] List<RectTransform> UIobjects;
     public int AppIndex;
+    //debug
+    public int frameCount;
     /*
     >>10.1
     0:Finder 1:iTunes 2:IE 3:Preview 4:Sherlock 5:システム環境設定 6:Stickies 7:TextEdit 8:Classic startup 9:OS9(SimpleText)
@@ -49,12 +53,14 @@ public class WindowManagerTest : MonoBehaviour
         }
         player_chara= player.GetComponent<CharacterController>();
         IsOverView = true;
+        playerCamera.SetActive(false);
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        frameCount++;
         /*if(isFirstFrame)
         {
             for(int i = 0;i<0;i++)//終わるまで無限ループ
@@ -74,6 +80,8 @@ public class WindowManagerTest : MonoBehaviour
         }
         if(Input.GetMouseButtonDown(0))//左ボタン押下取得
         {
+            //Debug.Log("クリック(WindowManagerTest.cs)");
+            ClickDown?.Invoke();
             if(IsOverView)
             {
                 FocusWindow();
@@ -86,11 +94,14 @@ public class WindowManagerTest : MonoBehaviour
         {
             ChangeViewMode(false);
             overViewCamera.SetActive(false);
+            playerCamera.SetActive(true);
+            
         }
         else
         {
             ChangeViewMode(true);
             overViewCamera.SetActive(true);
+            playerCamera.SetActive(false);
         }
     }
     public void SetWindowState()
