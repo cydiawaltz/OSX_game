@@ -11,7 +11,7 @@ public class threeDUIs : MonoBehaviour//機能まとめたやつみたいな　
     [SerializeField] Renderer obj3d;//3d用　このスクリプトがアサインされている可能性あるのでrendererで切り替え
     [SerializeField] GameObject OverViewCamera;
     [SerializeField] GameObject playerCamera;
-    [SerializeField] WindowManagerTest Manager;
+    [SerializeField] WindowManager Manager;
     public Quaternion origin;
     int frameCount;
     
@@ -21,12 +21,12 @@ public class threeDUIs : MonoBehaviour//機能まとめたやつみたいな　
         isUsingButton = Button != null;
         if(isLookAt)
         {
-            Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+            Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
             Manager.changeVisualState += Switch;
         }
         if(isChangeBetView)
         {
-            Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+            Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         }
         origin = this.transform.rotation;
         Set3DState(false);//2dからスタート

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerTEST : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public float JumpPower = 10;
     public float gravity = 20;
@@ -11,6 +11,7 @@ public class PlayerTEST : MonoBehaviour
 
     private Vector3 moveDirection = Vector3.zero;
     CharacterController controller;
+    float x,y,z;
 
     [SerializeField] GameObject bullet;
     [SerializeField] float bulletSpeed;
@@ -18,7 +19,7 @@ public class PlayerTEST : MonoBehaviour
     [SerializeField] Image HPbarFront;
     public int HP;//ユーザーのヒットポイント
     public int maxHP;//ユーザーの最大ヒットポイント
-    [SerializeField] WindowManagerTest manager;
+    [SerializeField] WindowManager manager;
     [Header("カメラはインスペクターでアサイン")]
     [SerializeField] Camera maincam;
     [SerializeField] Camera overViewCam;
@@ -27,7 +28,7 @@ public class PlayerTEST : MonoBehaviour
 
     void Start()
     {
-        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         controller = GetComponent<CharacterController>();
         originalPos = cameraTransform.position - transform.position;
         maxHP = HP;
@@ -36,8 +37,11 @@ public class PlayerTEST : MonoBehaviour
 
     void Update()
     {
+        x = Input.GetAxis("Horizontal");
+        z = Input.GetAxis("Vertical");
         if (controller.isGrounded)
         {
+            
             moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             moveDirection = transform.TransformDirection(moveDirection) * speed;
 
@@ -45,6 +49,12 @@ public class PlayerTEST : MonoBehaviour
             {
                 moveDirection.y = JumpPower;
             }
+        }
+        else
+        {
+            moveDirection.z = z * speed;
+            moveDirection.x = x * speed;
+            moveDirection = transform.TransformDirection(moveDirection);
         }
         moveDirection.y -= gravity * Time.deltaTime;
         controller.Move(moveDirection * Time.deltaTime);

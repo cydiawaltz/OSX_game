@@ -12,7 +12,7 @@ public class Enermy : MonoBehaviour
     public float distance;
     public int HP;//ユーザーのヒットポイント
     public int maxHP;//ユーザーの最大ヒットポイント
-    [SerializeField] WindowManagerTest manager;
+    [SerializeField] WindowManager manager;
     [Header("カメラはインスペクターでアサイン")]
     [SerializeField] Camera maincam;
     [SerializeField] Camera overViewCam;
@@ -26,7 +26,7 @@ public class Enermy : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player");
         ShootingLoop();
-        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         maxHP = HP;
     }
 

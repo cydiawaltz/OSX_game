@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class TDswitch : MonoBehaviour
 {
-    public WindowManagerTest Manager;
+    public WindowManager Manager;
     [SerializeField] GameObject[] FlatObjects;//平面オブジェクト　3Dモードで消す　下とインデックス対応させよ
     [SerializeField] GameObject[] Objects;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
+        Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         Manager.changeVisualState += Switch;
     }
 

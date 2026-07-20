@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine.UI;
 using System;
 
-public class WindowManagerTest : MonoBehaviour
+public class WindowManager : MonoBehaviour
 {
     [SerializeField] List<GameObject> windows;//Start()時のnull参照回避策　statestoreに情報流したら以後は使わない
     //[SerializeField] GameObject windowbase;//上のwindowsの親オブジェクト
@@ -16,11 +16,13 @@ public class WindowManagerTest : MonoBehaviour
     public float distBetWindow;//ウインドウ間の距離（y）飛び越えられないラインで SetWindowState()んとこに脳筋プレイしてるので整数限定で
     [SerializeField] GameObject player;
     [SerializeField] CharacterController player_chara;
-    [SerializeField] GameObject overViewCamera; 
+    [SerializeField] GameObject overViewCamera; //この二個は他から参照しまくるのでstatic
     [SerializeField] GameObject playerCamera;
+    
+    public static Camera overCam;
+    public static Camera playerCam;
     public Action changeVisualState;
     public Action changeIndexState;
-    public Action ClickDown;//menubar.csのクリックバグはフレーム数の不一致らしいのでこれで管理
     [SerializeField] List<RectTransform> UIobjects;
     public int AppIndex;
     //debug
@@ -36,7 +38,11 @@ public class WindowManagerTest : MonoBehaviour
     public int currentIndex;
     public Button changebutton;
     //[SerializeField] bool isFirstFrame = true;//Update()で処理　Start()で初期化するとパス通んない説
-
+    void Awake()
+    {
+        overCam = overViewCamera.GetComponent<Camera>();
+        playerCam = playerCamera.GetComponent<Camera>();
+    }
     void Start()
     {
         /*for(int i = 0;i<=windows.Count-1;i++)
@@ -81,14 +87,17 @@ public class WindowManagerTest : MonoBehaviour
         if(Input.GetMouseButtonDown(0))//左ボタン押下取得
         {
             //Debug.Log("クリック(WindowManagerTest.cs)");
-            ClickDown?.Invoke();
             if(IsOverView)
             {
                 FocusWindow();
             }
         }
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            OnChangeView();
+        }
     }
-    public void OnClick()
+    public void OnChangeView()
     {
         if(IsOverView)
         {
@@ -172,11 +181,12 @@ public class WindowManagerTest : MonoBehaviour
                 windows_statestore.Insert(0,target);
                 SetWindowState();
                 AppIndex = target.AppIndex;
+                //暫定
+                changeIndexState?.Invoke();
                 break;
             }
         }
-        //暫定
-        changeIndexState.Invoke();
+        
     }
     public void ChangeViewMode(bool isOverView)//表示を変更 引数は変更先が俯瞰か否か
     {
@@ -190,11 +200,20 @@ public class WindowManagerTest : MonoBehaviour
         }
         changeVisualState?.Invoke();
     }
-    public void CreateWindow(int WindowNumber,Vector2 position)
+    public void EnableWindowAsNewWindow(GameObject newWindow)
+    {
+        windows_statestore[0].isTopMost = false;//ここは古い最前面ウインドウ
+        windows_statestore[0].ChangeWindowState();
+        Window newstate = newWindow.GetComponent<Window>();
+        windows_statestore.Insert(0,newstate);
+        SetWindowState();
+        AppIndex = newstate.AppIndex;
+    }
+    /*public void CreateWindow(int WindowNumber,Vector2 position)
     {
         var window = Instantiate(instantiateObject[WindowNumber]).GetComponent<Window>();
         window.gameObject.transform.position = new Vector3(position.x,0,position.y);
         windows_statestore.Insert(0,window);
         SetWindowState();
-    }
+    }*/
 }

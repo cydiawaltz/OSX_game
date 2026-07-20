@@ -29,12 +29,15 @@ public class Icon : MonoBehaviour//iconにアタッチ
     [SerializeField] Renderer Text;
     [SerializeField] float fadeTime;
     public bool isUsingExp;//説明テキストを出すか？
+    [SerializeField] List<Material> targetMaterial;
+    [SerializeField] Color pushingColor;
+    bool ispushing = false;
 
     void Start()
     {
         //StartCoroutine(DoBounce());
         //Window.csから移植
-        OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
+        OverViewCamera = WindowManager.overCam;
         //windowManager = GameObject.FindWithTag("manager").GetComponent<WindowManagerTest>();
         originalWidth = this.transform.localScale.z;
         try
@@ -83,6 +86,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
             minX,
             Screen.height - maxY
         );
+        targetMaterial.Add(this.GetComponent<Renderer>().material);
     }
     void Update()
     {
@@ -91,8 +95,22 @@ public class Icon : MonoBehaviour//iconにアタッチ
                         mousePos.x <= maxX &&
                         mousePos.y >= minY &&
                         mousePos.y <= maxY;//ボタンの内側判定
-        if(Input.GetMouseButtonDown(0)&&!isAnimation)
+        if(Input.GetMouseButtonDown(0)&&!isAnimation&&isactive)
         {
+            foreach(var target in targetMaterial)
+            {
+                target.color = pushingColor;
+            }
+        }
+        else if(Input.GetMouseButtonUp(0)&&!isAnimation)
+        {
+            if(isactive)
+            {
+                foreach(var target in targetMaterial)
+                {
+                    target.color = new Color(1,1,1,1);
+                }
+            }
             StartCoroutine(ClickButtonDown(isactive));
         }
         else if(isUsingExp)
@@ -119,11 +137,11 @@ public class Icon : MonoBehaviour//iconにアタッチ
         if(allowStarting)
         {
             
-        if(isactive)
-        {
-            //ボタン押下時
-            yield return StartCoroutine(DoBounce());
-        }
+            if(isactive)
+            {
+                //ボタン押下時
+                yield return StartCoroutine(DoBounce());
+            }
         }
     }
     void FadeInText()

@@ -34,7 +34,8 @@ public class Window : MonoBehaviour
     //public WindowState state;
     void Start()
     {
-        OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
+        //OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
+        OverViewCamera = WindowManager.overCam;
         //windowManager = GameObject.FindWithTag("manager").GetComponent<WindowManagerTest>();
         if(textures.Length<2)//debug
         {
@@ -121,7 +122,7 @@ public class Window : MonoBehaviour
         }
         else
         {
-            if(!oldTopMost)
+            if(oldTopMost)
             {
                 for(int i = 0;i<=targetRenders.Count-1;i++)
                 {

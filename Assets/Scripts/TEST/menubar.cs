@@ -1,75 +1,89 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
+using System.Collections;
+using System;
+using DG.Tweening;
+
 
 public class menubar : MonoBehaviour//子側　
 {
     public bool isOS9;//OS9のメニューバーか否か 判定はGetMouseUpで消す
     public bool isMenubarEnable = false;//メニューバーが有効状態か
     public List<Renderer> elements;//左から順にアサイン プルダウンした時のやつ
-    public List<MenubarTypeSet> elementsHit = new List<MenubarTypeSet>();
-    [SerializeField] Camera OverViewCamera;
-    WindowManagerTest manager;
+    public List<RectAngleSet> elementsHit = new List<RectAngleSet>();
+    public List<Renderer> CommandMenu;//開いた時に出てくるやつ　 materialはtransparentで 
+    WindowManager manager;
     public int enableIndex;
+    [SerializeField] float ComMenuFadeDuration;//コマンドメニューのフェードアウト時間
+    [SerializeField] bool canTouch = true;//メニュー要素のフェード中？
+    public Ease ease;
     //debug
     public int frameCount;
-    
+    bool isSkipProcess;
+    int DownFrameCount = 0;
     
     void Start()
     {
-        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManagerTest>();
-        OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
-        manager.ClickDown += ClickDown;
+        manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
+        //manager.ClickDown += ClickDown;
         for(int i = 0; i < elements.Count; i++)
         {
-            elementsHit.Add(GetRectAngle(elements[i].gameObject));
+            elementsHit.Add(FunctionSet.GetRectAngle(elements[i].gameObject,WindowManager.overCam));
             Debug.Log("メニューバーの長方形"+i);
         }
         foreach(var element in elements)
         {
             element.enabled = false;//プルダウンした時だけ入れる感じで
         }
-    }
-    void ClickDown()
-    {
-        var mousePos = Input.mousePosition;
-        
-            Debug.Log("クリック(menubar.cs)"+gameObject.name);
-            if(isMenubarEnable)
+        foreach(var command in CommandMenu)
+        {
+            command.material.color = new Color(1,1,1,0);
+        }
+        /*try
+        {
+            CommandMenu = new List<Renderer>(elements.Count);
+            for(int i = 0; i < elements.Count; i++)
             {
-                Debug.Log("メニュー閉判定前");
-                    if(mousePos.x >= elementsHit[enableIndex].minX && mousePos.x <= elementsHit[enableIndex].maxX && mousePos.y >= elementsHit[enableIndex].minY && mousePos.y <= elementsHit[enableIndex].maxY)
-                    {
-                        CloseElements(enableIndex);
-                        isMenubarEnable = false;
-                        Debug.Log("メニューを閉じる");
-                    }
+                CommandMenu[i] = elements[i].transform.GetChild(0).GetComponent<Renderer>();
             }
-            else
-            {
-                Debug.Log("メニュー開判定前");
-                for(int i = 0; i < elementsHit.Count; i++)
-                {
-                    Debug.Log("接触判定前"+i);
-                    if(mousePos.x >= elementsHit[i].minX && mousePos.x <= elementsHit[i].maxX && mousePos.y >= elementsHit[i].minY && mousePos.y <= elementsHit[i].maxY)
-                    {
-                        OpenElements(i);
-                        enableIndex = i;
-                        isMenubarEnable = true;
-                        Debug.Log("メニューを開く");
-                        break;
-                    }
-                }
-            }
-        
+        }
+        catch(Exception e)
+        {
+            Debug.LogWarning("command Menuがねぇ"+e+"及び:"+gameObject.name);
+        }*/
     }
+    
     void Update()
     {
-        frameCount++;
-        var mousePos = Input.mousePosition;
-        //clickdownの中身はここにあった
-        /*if(Input.GetMouseButtonDown(0))
+        //frameCount++;
+        //var mousePos = Input.mousePosition;
+        /*isSkipProcess = false;
+        if(isMenubarEnable)
         {
-            Debug.Log("クリック(menubar.cs)"+gameObject.name);
+            int oldIndex = enableIndex;
+            for(int i = 0; i < elementsHit.Count; i++)
+            {
+                if(mousePos.x >= elementsHit[i].minX && mousePos.x <= elementsHit[i].maxX && mousePos.y >= elementsHit[i].minY && mousePos.y <= elementsHit[i].maxY)
+                {
+                    enableIndex = i;
+                    isSkipProcess = true;
+                    break;
+                }
+            }
+            if(oldIndex != enableIndex)
+            {
+                ChangeElementsState(oldIndex,enableIndex);
+                isSkipProcess = true;
+            }
+        }
+        //clickdownの中身はここにあった
+        if(Input.GetMouseButton(0)&&!isSkipProcess)
+        {
+            bool tmp_skipProcess = false;
+            if(DownFrameCount == 0)//押した一回だけ（GetMouseDownの代わり）
+            {
+                Debug.Log("クリック(menubar.cs)"+gameObject.name);
             if(isMenubarEnable)
             {
                 Debug.Log("メニュー閉判定前");
@@ -78,9 +92,10 @@ public class menubar : MonoBehaviour//子側　
                         CloseElements(enableIndex);
                         isMenubarEnable = false;
                         Debug.Log("メニューを閉じる");
+                        tmp_skipProcess = true;
                     }
             }
-            else
+            else if(!tmp_skipProcess)
             {
                 Debug.Log("メニュー開判定前");
                 for(int i = 0; i < elementsHit.Count; i++)
@@ -96,7 +111,13 @@ public class menubar : MonoBehaviour//子側　
                     }
                 }
             }
-        }*/
+            }
+            DownFrameCount ++;
+        }
+        else
+        {
+            DownFrameCount = 0;
+        }
         if(Input.GetMouseButtonUp(0))//OS9のメニューバーはクリック終了で消える+1fラグあり？
         {
             Debug.Log("マウスup(OS9)");
@@ -105,7 +126,10 @@ public class menubar : MonoBehaviour//子側　
                 isMenubarEnable = false;
             }
         }
-        if(isMenubarEnable)
+        */
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        isSkipProcess = false;
+        if(isMenubarEnable&&canTouch)
         {
             int oldIndex = enableIndex;
             for(int i = 0; i < elementsHit.Count; i++)
@@ -119,66 +143,109 @@ public class menubar : MonoBehaviour//子側　
             if(oldIndex != enableIndex)
             {
                 ChangeElementsState(oldIndex,enableIndex);
+                //StartCoroutine(ChangeElementsState(oldIndex,enableIndex));
+                isSkipProcess = true;
             }
         }
+        if(Input.GetMouseButtonDown(0)&&!isSkipProcess)//開ける時
+        {
+            if(DownFrameCount == 0)//押した一回だけ（GetMouseDownの代わり）
+            {
+                Debug.Log("クリック(menubar.cs)"+gameObject.name);
+                if(isMenubarEnable)
+                {
+                    CloseElements();
+                }
+                else
+                {
+                    for(int i = 0; i < elementsHit.Count; i++)
+                    {
+                        if(mousePos.x >= elementsHit[i].minX && mousePos.x <= elementsHit[i].maxX && mousePos.y >= elementsHit[i].minY && mousePos.y <= elementsHit[i].maxY)
+                        {
+                            StartCoroutine(OpenElements(i));
+                            enableIndex = i;
+                            break;
+                        }
+                    }
+                }
+                DownFrameCount ++;
+            }
+        }
+        else
+        {
+            DownFrameCount = 0;
+        }
+        if(Mouse.current.leftButton.wasReleasedThisFrame)//OS9のメニューバーはクリック終了で消える+1fラグあり？
+        {
+            if(isOS9)
+            {
+                isMenubarEnable = false;
+            }
+        }
+        
     }
-    void OpenElements(int index)
+    IEnumerator OpenElements(int index)
     {
+        canTouch = false;
         elements[index].enabled = true;
-        //詳細メニューの表示処理
         Debug.Log("open");
+        isMenubarEnable = true;
+        //2fずらして詳細メニューの表示処理 当時のiMacG3の重さを鑑みると共通で30fps前提で組む => 1/15s
+        yield return new WaitForSeconds(1/15f);
+        if(CommandMenu.Count>index)
+        {
+            CommandMenu[index].enabled = true;
+            CommandMenu[index].material.color = new Color(1,1,1,0);
+            CommandMenu[index].material.DOColor(new Color(1,1,1,1),ComMenuFadeDuration).SetEase(ease).OnComplete(()=>{
+                canTouch = true;
+            });
+        }
+        else{ canTouch = true;}
     }
-    void CloseElements(int index)
+    void CloseElements()
     {
-        elements[index].enabled = false;
+        canTouch = false;
+        foreach(var element in elements)
+        {
+            if(element.enabled){element.enabled = false;}
+        }
         //詳細メニューの非表示処理
         Debug.Log("close");
+        isMenubarEnable = false;
+        if(CommandMenu.Count>enableIndex)
+        {
+            CommandMenu[enableIndex].material.DOColor(new Color(1,1,1,0),ComMenuFadeDuration).SetEase(ease).OnComplete(()=>{
+                canTouch = true;
+                CommandMenu[enableIndex].enabled = false;
+                CommandMenu[enableIndex].material.color = new Color(1,1,1,0);
+            });
+        }
+        else
+        {
+            canTouch = true;
+        }
     }
     void ChangeElementsState(int oldIndex,int newIndex)
     {
+        var sequence = DOTween.Sequence();
         elements[oldIndex].enabled = false;
         elements[newIndex].enabled = true;
+        if(CommandMenu.Count>oldIndex)
+        {
+            CommandMenu[oldIndex].material.color = new Color(1,1,1,1);
+            sequence.Append(CommandMenu[oldIndex].material.DOColor(new Color(1,1,1,0),ComMenuFadeDuration)).SetEase(ease).OnComplete(()=>{
+                CommandMenu[oldIndex].enabled = false;
+            });
+        }
+        if(CommandMenu.Count>newIndex)
+        {
+            CommandMenu[newIndex].material.color = new Color(1,1,1,0);
+            CommandMenu[newIndex].enabled = true;
+            sequence.Append(CommandMenu[newIndex].material.DOColor(new Color(1,1,1,1),ComMenuFadeDuration)).SetEase(ease);
+        }
         Debug.Log("state change");
     }
-    MenubarTypeSet GetRectAngle(GameObject target)
-    {
-        MenubarTypeSet result = new MenubarTypeSet();
-        //ウインドウサイズの取得設定
-        MeshFilter mf = target.GetComponent<MeshFilter>();
-
-        Vector3[] vertices = mf.mesh.vertices;
-
-        result.minX = float.MaxValue;//ウインドウ左端
-        result.maxX = float.MinValue;//右端
-
-        result.minY = float.MaxValue;//下端
-        result.maxY = float.MinValue;//上端
-
-        foreach (Vector3 v in vertices)
-        {
-            // ローカル→ワールド
-            Vector3 world = target.transform.TransformPoint(v);
-
-            // ワールド→スクリーン
-            Vector3 screen = OverViewCamera.WorldToScreenPoint(world);
-
-            result.minX = Mathf.Min(result.minX, screen.x);
-            result.maxX = Mathf.Max(result.maxX, screen.x);
-
-            result.minY = Mathf.Min(result.minY, screen.y);
-            result.maxY = Mathf.Max(result.maxY, screen.y);
-        }
-
-        result.width = result.maxX - result.minX;
-        result.height = result.maxY - result.minY;
-
-        // Unityのスクリーン座標は左下原点なので左上座標に変換
-        Vector2 leftTop = new Vector2(
-            result.minX,
-            Screen.height - result.maxY
-        );
-        return result;
-    }
+    
     void OnDisable()
     {
         isMenubarEnable = false;
@@ -186,6 +253,7 @@ public class menubar : MonoBehaviour//子側　
         {
             elements[i].enabled = false;
         }
+        Debug.Log("Menubar Disable");
     }
 }
 

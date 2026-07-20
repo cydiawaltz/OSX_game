@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -777277355597328322}
   - component: {fileID: 7429261523213846224}
   - component: {fileID: 638203144474810401}
+  - component: {fileID: -5220058051770096660}
   m_Layer: 0
   m_Name: Enermy_shikigami
   m_TagString: E_shikigami
@@ -104,12 +105,14 @@ MonoBehaviour:
   player: {fileID: 0}
   isJumping: 0
   interval: 2
-  forwardForce: 4
-  jumpForce: 5
+  forwardForce: 6
+  jumpForce: 3
   rb: {fileID: 0}
   velocityY: 0
   old_velocityY: 0
   destroyObject: {fileID: 6264687091251239799, guid: 57b4e11f3d1af414288e690b9a392435, type: 3}
+  pCamera: {fileID: 0}
+  oCamera: {fileID: 0}
 --- !u!135 &7429261523213846224
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -117,7 +120,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6183497286461135911}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9e0786bfe26034cf3bdcc8795c68d860, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -127,7 +130,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -158,3 +161,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &-5220058051770096660
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183497286461135911}
+  m_Material: {fileID: 13400000, guid: 4f85ff938958845bd9b39a7d97255249, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
