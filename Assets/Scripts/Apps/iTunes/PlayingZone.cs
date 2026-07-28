@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayingZone : MonoBehaviour//iTunesのプレイ中の音楽を表示するとこ
 {
@@ -6,17 +7,28 @@ public class PlayingZone : MonoBehaviour//iTunesのプレイ中の音楽を表�
     [SerializeField] Texture[] textures;
     [SerializeField] Renderer target;
     [SerializeField] int targetMaterialIndex;
+    [SerializeField] float minpos,maxpos;
+    float space;
+    [SerializeField] float interval;
+    [SerializeField] float musicLength,playingTime;
     void Start()
     {
         bgm = BGMController.bgmBase;
         ChangeTex(0);
         bgm.changeBGMState+=ChangeBGM;
-    }
+        space = maxpos-minpos;
 
-    // Update is called once per frame
+    }
     void Update()
     {
-        
+        playingTime = bgm.source.time;
+    }
+    IEnumerator UpdatePlayingState()
+    {
+        while(true)
+        {
+            yield return null;
+        }
     }
     void ChangeBGM()
     {
@@ -28,6 +40,7 @@ public class PlayingZone : MonoBehaviour//iTunesのプレイ中の音楽を表�
                 Debug.LogWarning("入力値が不正だったから割っといたで♡");
             }
             ChangeTex(bgm.bgmindex);
+            musicLength = bgm.source.clip.length;
         }
         else
         {

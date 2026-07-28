@@ -9,7 +9,7 @@ public class WindowManager : MonoBehaviour
     [SerializeField] List<GameObject> windows;//Start()時のnull参照回避策　statestoreに情報流したら以後は使わない
     //[SerializeField] GameObject windowbase;//上のwindowsの親オブジェクト
     [SerializeField] List<Window> windows_statestore;//一個上のやつのWindowStateのインスタンス保持
-    
+
     [SerializeField] float defaultHeight;//ここは末端に合わせる
     public GameObject[] instantiateObject;//出る可能性のあるウインドウ(Assetに書き出し済みのやつ)
     public bool IsOverView;
@@ -18,7 +18,7 @@ public class WindowManager : MonoBehaviour
     [SerializeField] CharacterController player_chara;
     [SerializeField] GameObject overViewCamera; //この二個は他から参照しまくるのでstatic
     [SerializeField] GameObject playerCamera;
-    
+
     public static Camera overCam;
     public static Camera playerCam;
     public Action changeVisualState;
@@ -49,15 +49,15 @@ public class WindowManager : MonoBehaviour
         {
             windows.Add(windows[i].GetComponent<Window>() as Window);
         }*/
-        
+
         //defaultHeight = windows.Last().gameObject.transform.position.y;
         //SetWindowState();
         //var a = GetComponent<WindowManagerTest>()
-        for(int i = 0;i<=windows.Count-1;i++)//windows[]はこのあと使わない
+        for (int i = 0; i <= windows.Count - 1; i++)//windows[]はこのあと使わない
         {
             windows_statestore.Add(windows[i].GetComponent<Window>());
         }
-        player_chara= player.GetComponent<CharacterController>();
+        player_chara = player.GetComponent<CharacterController>();
         IsOverView = true;
         playerCamera.SetActive(false);
     }
@@ -79,32 +79,32 @@ public class WindowManager : MonoBehaviour
             }
             isFirstFrame = false;
         }*/
-        if(SetWindow)//debug
+        if (SetWindow)//debug
         {
             SetWindowState();
             SetWindow = false;
         }
-        if(Input.GetMouseButtonDown(0))//左ボタン押下取得
+        if (Input.GetMouseButtonDown(0))//左ボタン押下取得
         {
             //Debug.Log("クリック(WindowManagerTest.cs)");
-            if(IsOverView)
+            if (IsOverView)
             {
                 FocusWindow();
             }
         }
-        if(Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             OnChangeView();
         }
     }
     public void OnChangeView()
     {
-        if(IsOverView)
+        if (IsOverView)
         {
             ChangeViewMode(false);
             overViewCamera.SetActive(false);
             playerCamera.SetActive(true);
-            
+
         }
         else
         {
@@ -118,14 +118,14 @@ public class WindowManager : MonoBehaviour
         float pre_Height = -distBetWindow;
         //currentIndex = windows_statestore.Count - (int)(Mathf.Round(player.transform.position.y -0.6f)/ distBetWindow)-1;//超脳筋　もうちょいパフォーマンス落とさずになんとかする方法探したい
         //player.transform.parent = windows[currentIndex].transform;
-        
+
         player_chara.enabled = false;
         SetPlayerParent();
         GameObject parent = windows_statestore[currentIndex].gameObject;
-        for(int i = windows_statestore.Count-1; i >= 0; i--)
+        for (int i = windows_statestore.Count - 1; i >= 0; i--)
         {
             var window = windows_statestore[i].gameObject.transform.position;
-            window = new Vector3(window.x,pre_Height+distBetWindow,window.z);
+            window = new Vector3(window.x, pre_Height + distBetWindow, window.z);
             windows_statestore[i].gameObject.transform.position = window;
             pre_Height = window.y;
         }
@@ -133,21 +133,21 @@ public class WindowManager : MonoBehaviour
         {
             windows_statestore[i] = windows[i].GetComponent<Window>() as Window;
         }*/
-        Vector3 playerPos =  new Vector3(player.transform.position.x,parent.transform.position.y + 0.5f,player.transform.position.z);
+        Vector3 playerPos = new Vector3(player.transform.position.x, parent.transform.position.y + 0.5f, player.transform.position.z);
         player.transform.position = playerPos;
-        foreach(Window state in windows_statestore)
+        foreach (Window state in windows_statestore)
         {
             state.isTopMost = false;
         }
         windows_statestore[0].isTopMost = true;
-        player_chara.enabled= true;
+        player_chara.enabled = true;
     }
     public void SetPlayerParent()
     {
         List<float> distList = new List<float>();
-        for(int i = 0;i<windows_statestore.Count;i++)
+        for (int i = 0; i < windows_statestore.Count; i++)
         {
-            distList.Add(Mathf.Abs(windows_statestore[i].gameObject.transform.position.y-player.transform.position.y));
+            distList.Add(Mathf.Abs(windows_statestore[i].gameObject.transform.position.y - player.transform.position.y));
         }
         currentIndex = distList.IndexOf(distList.Min());
         //player.gameObject.transform.parent = windows_statestore[currentIndex].transform;
@@ -156,13 +156,13 @@ public class WindowManager : MonoBehaviour
     {
         //クリック位置をスクリーン座標→ワールド座標に変換してxz成分だけ使って判定　配列0(一番上)から順にやってく
         Vector3 mousePos = Input.mousePosition;
-        foreach(Window state in windows_statestore)
+        foreach (Window state in windows_statestore)
         {
             state.Pre_CheckWindowState();
         }
-        for(int i = 0;i<=UIobjects.Count-1;i++)
+        for (int i = 0; i <= UIobjects.Count - 1; i++)
         {
-            if(RectTransformUtility.RectangleContainsScreenPoint(UIobjects[i],mousePos))
+            if (RectTransformUtility.RectangleContainsScreenPoint(UIobjects[i], mousePos))
             {
                 windows_statestore[0].isTopMost = true;//UIオブジェクトの上にいるときは最前面のウインドウを最前面の状態にする
                 windows_statestore[0].ChangeWindowState();
@@ -170,15 +170,15 @@ public class WindowManager : MonoBehaviour
                 return;//UIオブジェクトの上にいるときはウインドウ操作をしない
             }
         }
-        for(int i = 0;i<=windows_statestore.Count-1;i++)
+        for (int i = 0; i <= windows_statestore.Count - 1; i++)
         {
             bool istarget = windows_statestore[i].CheckWindowState(mousePos);
             windows_statestore[i].ChangeWindowState();
-            if(istarget)
+            if (istarget)
             {
                 Window target = windows_statestore[i];
                 windows_statestore.RemoveAt(i);
-                windows_statestore.Insert(0,target);
+                windows_statestore.Insert(0, target);
                 SetWindowState();
                 AppIndex = target.AppIndex;
                 //暫定
@@ -186,11 +186,11 @@ public class WindowManager : MonoBehaviour
                 break;
             }
         }
-        
+
     }
     public void ChangeViewMode(bool isOverView)//表示を変更 引数は変更先が俯瞰か否か
     {
-        if(isOverView)//俯瞰視点
+        if (isOverView)//俯瞰視点
         {
             IsOverView = true;
         }
@@ -205,7 +205,7 @@ public class WindowManager : MonoBehaviour
         windows_statestore[0].isTopMost = false;//ここは古い最前面ウインドウ
         windows_statestore[0].ChangeWindowState();
         Window newstate = newWindow.GetComponent<Window>();
-        windows_statestore.Insert(0,newstate);
+        windows_statestore.Insert(0, newstate);
         SetWindowState();
         AppIndex = newstate.AppIndex;
     }

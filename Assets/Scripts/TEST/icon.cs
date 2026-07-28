@@ -22,8 +22,9 @@ public class Icon : MonoBehaviour//iconにアタッチ
     
     public bool isMinimumWindow;//最小化ウインドウか？(ジニーエフェクトの問題あるんで検討中)
     //public Vector2 originalPosition;//左上の座標(スクリーン)　=> ウインドウ位置を補正しないこと前提
-    public float width,height;//横幅・縦幅 
-    float minX,minY,maxX,maxY;//ウインドウ各端
+    //public float width,height;//横幅・縦幅 
+    //float minX,minY,maxX,maxY;//ウインドウ各端
+    public RectAngleSet rect;
     [SerializeField] GameObject status;//アイコン下の三角
     [SerializeField] bool isText;
     [SerializeField] Renderer Text;
@@ -53,7 +54,8 @@ public class Icon : MonoBehaviour//iconにアタッチ
             Debug.LogError("テキストの子オブジェクトがねぇ,"+this.gameObject.name);
         }
         //ウインドウサイズの取得設定
-        MeshFilter mf = this.GetComponent<MeshFilter>();
+        rect = FunctionSet.GetRectAngle(this.gameObject,WindowManager.overCam);
+        /*MeshFilter mf = this.GetComponent<MeshFilter>();
 
         Vector3[] vertices = mf.mesh.vertices;
 
@@ -85,16 +87,17 @@ public class Icon : MonoBehaviour//iconにアタッチ
         Vector2 leftTop = new Vector2(
             minX,
             Screen.height - maxY
-        );
+        );*/
+
         targetMaterial.Add(this.GetComponent<Renderer>().material);
     }
     void Update()
     {
         var mousePos = Input.mousePosition;
-        bool isactive = mousePos.x >= minX &&
-                        mousePos.x <= maxX &&
-                        mousePos.y >= minY &&
-                        mousePos.y <= maxY;//ボタンの内側判定
+        bool isactive = mousePos.x >= rect.minX &&
+                        mousePos.x <= rect.maxX &&
+                        mousePos.y >= rect.minY &&
+                        mousePos.y <= rect.maxY;//ボタンの内側判定
         if(Input.GetMouseButtonDown(0)&&!isAnimation&&isactive)
         {
             foreach(var target in targetMaterial)
