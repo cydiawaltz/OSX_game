@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class Window : MonoBehaviour
 {
-    //public WindowManagerTest windowManager;
+    public WindowManager windowManager;
     public int AppIndex;//このウインドウが何のアプリか　基本的にはDock順 WindowManagerTestのAppIndex
     public bool isTopMost;//ステータスバー、各種ボタンのグレーアウトに使用
     public bool oldTopMost;
@@ -18,6 +19,7 @@ public class Window : MonoBehaviour
     //public Vector2 originalPosition;//左上の座標(スクリーン)　=> ウインドウ位置を補正しないこと前提
     //public float width, height;//横幅・縦幅 
     //float minX, minY, maxX, maxY;//ウインドウ各端
+    public Action OnChangeWindowState;//ウインドウ状態が変化した時に呼ばれるイベント
     public bool isDraging;//何某かをドラッグ中 スライダー？
     public Texture[] textures;//ウインドウ状態ごとのテクスチャ　0:通常　1:最前面
     public List<Renderer> targetRenders;//テクスチャ変更するレンダラー　同じテクスチャにまとめてるので全部に同じの流してもOK
@@ -27,10 +29,12 @@ public class Window : MonoBehaviour
     [SerializeField] GameObject target;//これはrectanglesetの取得用
     //chatgpt
     [SerializeField] float titleBarHeight; // スクリーン座標
-    bool isDragging;
+    bool isDragging; 
+    public Action OnDragEnd;
     Vector3 dragOffset;
     float screenZ;
     private RectAngleSet rect;
+    public SignalButton signal;
 
     //debug
     public bool isChangeRadius;
@@ -42,7 +46,7 @@ public class Window : MonoBehaviour
     {
         //OverViewCamera = GameObject.FindWithTag("OverViewCamera").GetComponent<Camera>();
         OverViewCamera = WindowManager.overCam;
-        //windowManager = GameObject.FindWithTag("manager").GetComponent<WindowManagerTest>();
+        windowManager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         if (textures.Length < 2)//debug
         {
             Debug.Log("テクスチャ不足 -Window.cs -ObjectName:" + this.gameObject.name);
@@ -90,6 +94,15 @@ public class Window : MonoBehaviour
             Screen.height - maxY
         );*/
         rect = FunctionSet.GetRectAngle(target, OverViewCamera);
+        try{signal.OnClick+= CloseWindow;}
+        catch{Debug.Log("signalbuttonがない"+gameObject.name);}
+    }
+    void CloseWindow()
+    {
+        if(isTopMost)
+        {
+            
+        }
     }
     IEnumerator SliderDrag()
     {
@@ -114,6 +127,7 @@ public class Window : MonoBehaviour
     }
     public void ChangeWindowState()//ウインドウ状態（テクスチャなど）を変更
     {
+        OnChangeWindowState?.Invoke();
         if (isSkipChangeTexture)//debug
         {
             return;
@@ -189,6 +203,7 @@ public class Window : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
+            OnDragEnd?.Invoke();
             rect = FunctionSet.GetRectAngle(target, OverViewCamera);
         }
 

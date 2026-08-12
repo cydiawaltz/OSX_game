@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShadowDrawer : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField] GameObject[] shadowTargets;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
