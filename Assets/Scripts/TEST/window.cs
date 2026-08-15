@@ -108,11 +108,11 @@ public class Window : MonoBehaviour
     {
         yield return null;
     }
-    public void Pre_CheckWindowState()//CheckWindowState()呼ぶ前に必ず呼ぶ　初期化用関数
+    public void Pre_SetWindowState()//CheckWindowState()呼ぶ前に必ず呼ぶ　初期化用関数
     {
         isTopMost = false;
     }
-    public bool CheckWindowState(Vector3 mousePos)
+    public bool SetWindowState(Vector3 mousePos)
     {
         bool isactive = mousePos.x >= rect.minX &&
                         mousePos.x <= rect.maxX &&
@@ -123,6 +123,15 @@ public class Window : MonoBehaviour
             isTopMost = true;
         }
 
+        return isactive;
+    }
+    public bool CheckWindowState(Vector3 mousePos)//ウインドウの内側にマウスがあるかだけの判定
+    {
+        bool isactive = mousePos.x >= rect.minX &&
+                        mousePos.x <= rect.maxX &&
+                        mousePos.y >= rect.minY &&
+                        mousePos.y <= rect.maxY;
+        Debug.Log("CheckWindowState RECT"+ rect.minX + "," + rect.maxX + "," + rect.minY + "," + rect.maxY);
         return isactive;
     }
     public void ChangeWindowState()//ウインドウ状態（テクスチャなど）を変更
@@ -195,7 +204,7 @@ public class Window : MonoBehaviour
 
             this.transform.position = new Vector3(
                 pos.x,
-                target.transform.position.y,
+                this.transform.position.y,
                 pos.z
             );
         }

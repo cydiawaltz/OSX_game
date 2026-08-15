@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -57,7 +58,10 @@ public class Player : MonoBehaviour
             moveDirection = transform.TransformDirection(moveDirection);
         }
         moveDirection.y -= gravity * Time.deltaTime;
-        controller.Move(moveDirection * Time.deltaTime);
+        if(controller.enabled)
+        {
+            controller.Move(moveDirection * Time.deltaTime);
+        }
 
         cameraTransform.position = new Vector3(
             transform.position.x + originalPos.x,

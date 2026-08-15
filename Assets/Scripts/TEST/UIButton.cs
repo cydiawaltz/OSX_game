@@ -8,7 +8,7 @@ public class UIButton : MonoBehaviour
 
     [SerializeField] Camera overViewCamera;
     [SerializeField] bool turnUnActiveOnEnd;
-     Material target;
+    Material target;
     [SerializeField] Renderer targetrenderer;
     [SerializeField] Texture[] textures;//0:有効 1:無効 2:裏有効
     //[SerializeField] Color DownColor;
@@ -24,15 +24,16 @@ public class UIButton : MonoBehaviour
         target = targetrenderer.material;
         parent.OnChangeWindowState += ChangeActiveState;
         parent.OnDragEnd += () => { rect = FunctionSet.GetRectAngle(gameObject, overViewCamera); };
+        rect = FunctionSet.GetRectAngle(gameObject, overViewCamera);
     }
 
     void Update()
     {
         //rect = FunctionSet.GetRectAngle(gameObject, overViewCamera);
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             Vector3 mouse = Input.mousePosition;
-            if(isActive && mouse.x >= rect.minX &&
+            if (isActive && mouse.x >= rect.minX &&
                 mouse.x <= rect.maxX &&
                 mouse.y >= rect.minY &&
                 mouse.y <= rect.maxY)
@@ -50,18 +51,19 @@ public class UIButton : MonoBehaviour
                 mouse.y <= rect.maxY)
             {
                 OnClick?.Invoke();
+                if (turnUnActiveOnEnd) isActive = false;
+                target.mainTexture = isActive ? textures[0] : textures[1];
             }
-            target.mainTexture = isActive ? textures[0] : textures[1];
-            if(turnUnActiveOnEnd) isActive = false;
+
         }
     }
     void ChangeActiveState()
     {
-        if(parent.isTopMost && !parent.oldTopMost)
+        if (parent.isTopMost && !parent.oldTopMost)
         {
             target.mainTexture = textures[0];
         }
-        else if(!parent.isTopMost && parent.oldTopMost)
+        else if (!parent.isTopMost && parent.oldTopMost)
         {
             target.mainTexture = textures[2];
         }

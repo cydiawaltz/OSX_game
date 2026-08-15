@@ -13,7 +13,8 @@ public class PlayingZone : MonoBehaviour//iTunesのプレイ中の音楽を表�
     [SerializeField] float musicLength,playingTime;
     void Start()
     {
-        bgm = BGMController.bgmBase;
+        //bgm = BGMController.bgmBase;
+        bgm = GameObject.FindWithTag("Manager").GetComponent<BGMController>();
         ChangeTex(0);
         bgm.changeBGMState+=ChangeBGM;
         space = maxpos-minpos;
@@ -32,6 +33,11 @@ public class PlayingZone : MonoBehaviour//iTunesのプレイ中の音楽を表�
     }
     void ChangeBGM()
     {
+        StartCoroutine(FixChangeBGM());
+    }
+    IEnumerator FixChangeBGM()//更新タイミングの関係？
+    {
+        yield return null;
         if(bgm.source.isPlaying)
         {
             if(bgm.bgmindex >= textures.Length)
@@ -49,6 +55,7 @@ public class PlayingZone : MonoBehaviour//iTunesのプレイ中の音楽を表�
     }
     void ChangeTex(int index)
     {
+        Debug.Log("ChangeTex:"+index);
         target.materials[targetMaterialIndex].mainTexture = textures[index];
     }
 }

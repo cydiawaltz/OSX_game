@@ -43,6 +43,7 @@ public class BGMController : MonoBehaviour
             newindex = newindex%clips.Length;
             Debug.LogWarning("入力値が不正だったから割っといたで♡");
         }
+        bgmindex = newindex;
         source.clip = clips[newindex];
         source.Play();
         changeBGMState?.Invoke();

@@ -16,6 +16,7 @@ public class WindowManager : MonoBehaviour
     public float distBetWindow;//ウインドウ間の距離（y）飛び越えられないラインで SetWindowState()んとこに脳筋プレイしてるので整数限定で
     [SerializeField] GameObject player;
     [SerializeField] CharacterController player_chara;
+    //[SerializeField] Rigidbody player_rigidbody;
     [SerializeField] GameObject overViewCamera; //この二個は他から参照しまくるのでstatic
     [SerializeField] GameObject playerCamera;
 
@@ -24,7 +25,10 @@ public class WindowManager : MonoBehaviour
     public Action changeVisualState;
     public Action changeIndexState;
     [SerializeField] List<RectTransform> UIobjects;
+    float previousWindowY;
+    Window currentWindow;
     public int AppIndex;
+    public float playerOffset;
     //debug
     public int frameCount;
     /*
@@ -37,6 +41,10 @@ public class WindowManager : MonoBehaviour
     public bool SetWindow;
     public int currentIndex;
     public Button changebutton;
+    public int windowIndex;
+    bool isMoveplayer;
+    Window current;
+    float oldWindowPos;
     //[SerializeField] bool isFirstFrame = true;//Update()で処理　Start()で初期化するとパス通んない説
     void Awake()
     {
@@ -58,6 +66,7 @@ public class WindowManager : MonoBehaviour
             windows_statestore.Add(windows[i].GetComponent<Window>());
         }
         player_chara = player.GetComponent<CharacterController>();
+        //player_rigidbody = player.GetComponent<Rigidbody>();
         IsOverView = true;
         playerCamera.SetActive(false);
     }
@@ -66,7 +75,7 @@ public class WindowManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        frameCount++;
+        //frameCount++;
         /*if(isFirstFrame)
         {
             for(int i = 0;i<0;i++)//終わるまで無限ループ
@@ -96,7 +105,29 @@ public class WindowManager : MonoBehaviour
         {
             OnChangeView();
         }
+        //FollowCurrentWindow();
     }
+    /*void FollowCurrentWindow()
+    {
+        if (IsOverView)
+            return;
+
+        if (windows_statestore.Count == 0)
+            return;
+
+        GameObject currentWindow =
+            windows_statestore[currentIndex].gameObject;
+
+        float currentWindowY = currentWindow.transform.position.y;
+        float deltaY = currentWindowY - previousWindowY;
+
+        if (deltaY != 0f)
+        {
+            player.transform.position += new Vector3(0f, deltaY, 0f);
+        }
+
+        previousWindowY = currentWindowY;
+    }*/
     public void OnChangeView()
     {
         if (IsOverView)
@@ -113,52 +144,76 @@ public class WindowManager : MonoBehaviour
             playerCamera.SetActive(false);
         }
     }
+    void Pre_SetWindowState()//CheckWindowState()呼ぶ前に必ず呼ぶ　初期化用関数
+    {
+        //プレイヤー処理
+        Vector2 playerScreenPos = WindowManager.overCam.WorldToScreenPoint(player.transform.position);
+        //playerScreenPos = new Vector2(playerScreenPos.x - Screen.width / 2, playerScreenPos.y);
+        Debug.Log("playerScreenPos" + playerScreenPos.x+"," + playerScreenPos.y);
+        Debug.Log("Mouse:" + Input.mousePosition.x + "," + Input.mousePosition.y);
+        List<float> distList = new List<float>();
+        isMoveplayer = false;
+        int backwindowIndex = (int)(player.transform.position.y/distBetWindow);
+         windowIndex = windows_statestore.Count - 1 - backwindowIndex;
+         if(windowIndex < 0) windowIndex = 0;
+        if(windows_statestore[windowIndex].CheckWindowState(playerScreenPos))
+        {
+            Debug.LogWarning("player on window");
+            current = windows_statestore[windowIndex];
+            isMoveplayer = true;
+        }
+        else Debug.LogWarning("player not on window");  current = windows_statestore[0];//これはダミー
+        oldWindowPos = windows_statestore[windowIndex].transform.position.y;
+    }
     public void SetWindowState()
     {
-        float pre_Height = -distBetWindow;
-        //currentIndex = windows_statestore.Count - (int)(Mathf.Round(player.transform.position.y -0.6f)/ distBetWindow)-1;//超脳筋　もうちょいパフォーマンス落とさずになんとかする方法探したい
-        //player.transform.parent = windows[currentIndex].transform;
-
         player_chara.enabled = false;
-        SetPlayerParent();
-        GameObject parent = windows_statestore[currentIndex].gameObject;
+
+        
+        float pre_Height = -distBetWindow;
+        
+        // Windowを再配置
         for (int i = windows_statestore.Count - 1; i >= 0; i--)
         {
-            var window = windows_statestore[i].gameObject.transform.position;
-            window = new Vector3(window.x, pre_Height + distBetWindow, window.z);
-            windows_statestore[i].gameObject.transform.position = window;
-            pre_Height = window.y;
+            Transform windowTransform = windows_statestore[i].transform;
+
+            windowTransform.position = new Vector3(
+                windowTransform.position.x,
+                pre_Height + distBetWindow,
+                windowTransform.position.z
+            );
+
+            pre_Height = windowTransform.position.y;
         }
-        /*for(int i = 0;i<=windows.Count-1;i++)
-        {
-            windows_statestore[i] = windows[i].GetComponent<Window>() as Window;
-        }*/
-        Vector3 playerPos = new Vector3(player.transform.position.x, parent.transform.position.y + 0.5f, player.transform.position.z);
-        player.transform.position = playerPos;
+
+
         foreach (Window state in windows_statestore)
         {
             state.isTopMost = false;
         }
+
         windows_statestore[0].isTopMost = true;
+
+        // 並び替え後のcurrentIndexだけ更新
+        currentIndex = windows_statestore.IndexOf(currentWindow);
+        //player処理
+        if(isMoveplayer)
+        {
+            float newWindowPos = current.transform.position.y;
+            float deltaY = newWindowPos - oldWindowPos;
+            player.transform.position += new Vector3(0f, deltaY+1.8f, 0f);
+        }
         player_chara.enabled = true;
     }
-    public void SetPlayerParent()
-    {
-        List<float> distList = new List<float>();
-        for (int i = 0; i < windows_statestore.Count; i++)
-        {
-            distList.Add(Mathf.Abs(windows_statestore[i].gameObject.transform.position.y - player.transform.position.y));
-        }
-        currentIndex = distList.IndexOf(distList.Min());
-        //player.gameObject.transform.parent = windows_statestore[currentIndex].transform;
-    }
+    
     public void FocusWindow()//ウインドウをクリックして最前列に
     {
         //クリック位置をスクリーン座標→ワールド座標に変換してxz成分だけ使って判定　配列0(一番上)から順にやってく
         Vector3 mousePos = Input.mousePosition;
+        Pre_SetWindowState();
         foreach (Window state in windows_statestore)
         {
-            state.Pre_CheckWindowState();
+            state.Pre_SetWindowState();
         }
         for (int i = 0; i <= UIobjects.Count - 1; i++)
         {
@@ -172,7 +227,7 @@ public class WindowManager : MonoBehaviour
         }
         for (int i = 0; i <= windows_statestore.Count - 1; i++)
         {
-            bool istarget = windows_statestore[i].CheckWindowState(mousePos);
+            bool istarget = windows_statestore[i].SetWindowState(mousePos);
             windows_statestore[i].ChangeWindowState();
             if (istarget)
             {
@@ -202,12 +257,24 @@ public class WindowManager : MonoBehaviour
     }
     public void EnableWindowAsNewWindow(GameObject newWindow)
     {
-        windows_statestore[0].isTopMost = false;//ここは古い最前面ウインドウ
-        windows_statestore[0].ChangeWindowState();
-        Window newstate = newWindow.GetComponent<Window>();
-        windows_statestore.Insert(0, newstate);
+        Window newState = newWindow.GetComponent<Window>();
+
+        if (windows_statestore.Contains(newState))
+        {
+            windows_statestore.Remove(newState);
+        }
+
+        windows_statestore.Insert(0, newState);
+
+        // 新しく開いたWindowを現在Windowにする
+        currentWindow = newState;
+        currentIndex = 0;
+
+        AppIndex = newState.AppIndex;
+
         SetWindowState();
-        AppIndex = newstate.AppIndex;
+
+        changeIndexState?.Invoke();
     }
     /*public void CreateWindow(int WindowNumber,Vector2 position)
     {
