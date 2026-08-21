@@ -79,12 +79,12 @@ public class threeDUIs : MonoBehaviour//機能まとめたやつみたいな　
             if(!to3D)
             {
                 obj3d.enabled = true;
-                flatObj.enabled = false;
+                if(flatObj != null){flatObj.enabled = false;}
             }
             else
             {
                 obj3d.enabled = false;
-                flatObj.enabled = true;
+                if(flatObj != null){flatObj.enabled = true;}
             }
         }
         else

@@ -25,6 +25,7 @@ public class UIButton : MonoBehaviour
         parent.OnChangeWindowState += ChangeActiveState;
         parent.OnDragEnd += () => { rect = FunctionSet.GetRectAngle(gameObject, overViewCamera); };
         rect = FunctionSet.GetRectAngle(gameObject, overViewCamera);
+        target.mainTexture = textures[1];
     }
 
     void Update()
@@ -52,7 +53,8 @@ public class UIButton : MonoBehaviour
             {
                 OnClick?.Invoke();
                 if (turnUnActiveOnEnd) isActive = false;
-                target.mainTexture = isActive ? textures[0] : textures[1];
+                if(isActive) target.mainTexture = textures[1];
+                else target.mainTexture = textures[2];
             }
 
         }

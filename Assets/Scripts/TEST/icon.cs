@@ -42,6 +42,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
     [SerializeField] bool noBounceWhenLaunched = true; // 起動済みならバウンドしない
     [SerializeField] SignalButton signal;
     [SerializeField] bool bounceOnly; // バウンドだけして起動しない
+    Window targetWindow;
 
     void Start()
     {
@@ -99,6 +100,25 @@ public class Icon : MonoBehaviour//iconにアタッチ
         );*/
 
         targetMaterial.Add(this.GetComponent<Renderer>().material);
+        if(status != null) bounceOnly = false;
+        if(status != null)
+        {
+            status.SetActive(false);
+            if(window.activeSelf)
+            {
+                status.SetActive(true); 
+                isLaunched = true;
+            } 
+            else
+            {
+                status.SetActive(false);
+                isLaunched = false;
+            }
+        }
+        if(window != null)
+        {
+            targetWindow = window.GetComponent<Window>();
+        }
     }
     void Update()
     {
@@ -144,11 +164,32 @@ public class Icon : MonoBehaviour//iconにアタッチ
         }
 
     }
+    public void StartorBackToApp()
+    {
+        StartCoroutine(StartorBackToAppCoroutine());
+    }
+    IEnumerator StartorBackToAppCoroutine()
+    {
+        
+        //window.SetActive(true);
+        yield return StartCoroutine(DoBounce());
+        if (!isLaunched)
+        {
+            status.SetActive(true);
+        }
+        isLaunched = true;
+        yield return new WaitForSeconds(0.8f);
+        Manager.EnableWindowAsNewWindow(window);
+    }
     IEnumerator ClickButtonDown(bool isactive)
     {
         if (!allowStarting || !isactive)
             yield break;
-
+        if(targetWindow ! == null)
+        {
+            if(targetWindow.isTopMost)
+            yield break;
+        }
         // 起動済みならウインドウを最前面へ
         if (isLaunched)
         {
@@ -214,7 +255,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
 
         }
         isLaunched = true;
-        window.SetActive(true);
+        //window.SetActive(true);
         Manager.EnableWindowAsNewWindow(window);
     }
 

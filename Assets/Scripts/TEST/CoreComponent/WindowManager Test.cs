@@ -149,29 +149,29 @@ public class WindowManager : MonoBehaviour
         //プレイヤー処理
         Vector2 playerScreenPos = WindowManager.overCam.WorldToScreenPoint(player.transform.position);
         //playerScreenPos = new Vector2(playerScreenPos.x - Screen.width / 2, playerScreenPos.y);
-        Debug.Log("playerScreenPos" + playerScreenPos.x+"," + playerScreenPos.y);
+        Debug.Log("playerScreenPos" + playerScreenPos.x + "," + playerScreenPos.y);
         Debug.Log("Mouse:" + Input.mousePosition.x + "," + Input.mousePosition.y);
         List<float> distList = new List<float>();
         isMoveplayer = false;
-        int backwindowIndex = (int)(player.transform.position.y/distBetWindow);
-         windowIndex = windows_statestore.Count - 1 - backwindowIndex;
-         if(windowIndex < 0) windowIndex = 0;
-        if(windows_statestore[windowIndex].CheckWindowState(playerScreenPos))
+        int backwindowIndex = (int)(player.transform.position.y / distBetWindow);
+        windowIndex = windows_statestore.Count - 1 - backwindowIndex;
+        if (windowIndex < 0) windowIndex = 0;
+        if (windows_statestore[windowIndex].CheckWindowState(playerScreenPos))
         {
             Debug.LogWarning("player on window");
             current = windows_statestore[windowIndex];
             isMoveplayer = true;
         }
-        else Debug.LogWarning("player not on window");  current = windows_statestore[0];//これはダミー
+        else Debug.LogWarning("player not on window"); current = windows_statestore[0];//これはダミー
         oldWindowPos = windows_statestore[windowIndex].transform.position.y;
     }
     public void SetWindowState()
     {
         player_chara.enabled = false;
 
-        
+
         float pre_Height = -distBetWindow;
-        
+
         // Windowを再配置
         for (int i = windows_statestore.Count - 1; i >= 0; i--)
         {
@@ -197,15 +197,15 @@ public class WindowManager : MonoBehaviour
         // 並び替え後のcurrentIndexだけ更新
         currentIndex = windows_statestore.IndexOf(currentWindow);
         //player処理
-        if(isMoveplayer)
+        if (isMoveplayer)
         {
             float newWindowPos = current.transform.position.y;
             float deltaY = newWindowPos - oldWindowPos;
-            player.transform.position += new Vector3(0f, deltaY+1.8f, 0f);
+            player.transform.position += new Vector3(0f, deltaY + 1.8f, 0f);
         }
         player_chara.enabled = true;
     }
-    
+
     public void FocusWindow()//ウインドウをクリックして最前列に
     {
         //クリック位置をスクリーン座標→ワールド座標に変換してxz成分だけ使って判定　配列0(一番上)から順にやってく
@@ -257,10 +257,15 @@ public class WindowManager : MonoBehaviour
     }
     public void EnableWindowAsNewWindow(GameObject newWindow)
     {
+        newWindow.SetActive(true);
         Window newState = newWindow.GetComponent<Window>();
 
         if (windows_statestore.Contains(newState))
         {
+            if(windows_statestore[0] == newState)
+            {
+                return;
+            }
             windows_statestore.Remove(newState);
         }
 
@@ -273,9 +278,27 @@ public class WindowManager : MonoBehaviour
         AppIndex = newState.AppIndex;
 
         SetWindowState();
+        foreach (Window state in windows_statestore)
+        {
+            state.ChangeWindowState();
+        }
 
         changeIndexState?.Invoke();
     }
+    public void CloseWindow(Window targetWindow)
+    {
+        if (windows_statestore.Contains(targetWindow))
+        {
+            windows_statestore.Remove(targetWindow);
+            targetWindow.gameObject.SetActive(false);
+            SetWindowState();
+            changeIndexState?.Invoke();
+        }
+    }
+    /*public void EnableWindowAsOpendWindow(GameObject newWindow)
+    {
+        
+    }*/
     /*public void CreateWindow(int WindowNumber,Vector2 position)
     {
         var window = Instantiate(instantiateObject[WindowNumber]).GetComponent<Window>();
