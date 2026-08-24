@@ -29,7 +29,7 @@ public class Window : MonoBehaviour
     [SerializeField] GameObject target;//これはrectanglesetの取得用
     //chatgpt
     [SerializeField] float titleBarHeight; // スクリーン座標
-    bool isDragging; 
+    bool isDragging;
     public Action OnDragEnd;
     Vector3 dragOffset;
     float screenZ;
@@ -94,14 +94,14 @@ public class Window : MonoBehaviour
             Screen.height - maxY
         );*/
         rect = FunctionSet.GetRectAngle(target, OverViewCamera);
-        try{signal.OnClick+= CloseWindow;}
-        catch{Debug.Log("signalbuttonがない"+gameObject.name);}
+        try { signal.OnClick += CloseWindow; }
+        catch { Debug.Log("signalbuttonがない" + gameObject.name); }
     }
     void CloseWindow()
     {
-        if(isTopMost)
+        if (isTopMost)
         {
-            
+
         }
     }
     IEnumerator SliderDrag()
@@ -131,7 +131,7 @@ public class Window : MonoBehaviour
                         mousePos.x <= rect.maxX &&
                         mousePos.y >= rect.minY &&
                         mousePos.y <= rect.maxY;
-        Debug.Log("CheckWindowState RECT"+ rect.minX + "," + rect.maxX + "," + rect.minY + "," + rect.maxY);
+        Debug.Log("CheckWindowState RECT" + rect.minX + "," + rect.maxX + "," + rect.minY + "," + rect.maxY);
         return isactive;
     }
     public void ChangeWindowState()//ウインドウ状態（テクスチャなど）を変更
@@ -160,6 +160,24 @@ public class Window : MonoBehaviour
                 }
             }
             oldTopMost = false;
+        }
+    }
+    public void SetRenderQueue(int queue)
+    {
+        /*foreach (Renderer renderer in targetRenders)
+        {
+            if(renderer.material.GetFloat("_Surface") == 1)//透明故続行也
+                renderer.material.renderQueue = queue;
+            queue++;
+            //else
+            //renderer.material.renderQueue = queue-1000;
+        }*/
+        queue += 10;
+        for(int i = 0; i < targetRenders.Count; i++)
+        {
+            if(targetRenders[i].material.GetFloat("_Surface") == 1)//透明故続行也
+                targetRenders[i].material.renderQueue = queue;
+            queue--;
         }
     }
     void Update()

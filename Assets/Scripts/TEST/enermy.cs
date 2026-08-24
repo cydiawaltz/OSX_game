@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class Enermy : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject bullet;//prefab インスペクターでアサイン
     [SerializeField] GameObject player;

@@ -187,8 +187,11 @@ public class Icon : MonoBehaviour//iconにアタッチ
             yield break;
         if(targetWindow ! == null)
         {
-            if(targetWindow.isTopMost)
-            yield break;
+            //if(targetWindow.isTopMost) => なんか色々競合して直すのもだりぃのでmanagerの参照と比較
+            if(Manager.windows_statestore[0] == targetWindow)
+            {
+                yield break;
+            }
         }
         // 起動済みならウインドウを最前面へ
         if (isLaunched)

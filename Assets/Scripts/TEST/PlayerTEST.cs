@@ -104,6 +104,7 @@ public class Player : MonoBehaviour
     }
     void OnCollisionEnter(Collision other)
     {
+        try{
         if (other.gameObject.CompareTag("E_shikigami"))
         {
             HP -= 1; // ヒットポイントを減らす
@@ -122,6 +123,11 @@ public class Player : MonoBehaviour
                 // GameOver処理
                 Debug.Log("Game Over(Enemy)");
             }
+        }
+        }
+        catch(Exception e)
+        {
+            Debug.Log("Player.cs:OnCollisionEnter:Exception:"+e);
         }
         HPbarFront.fillAmount = (float)HP / maxHP; // HPバーの更新（例: HPが100の場合）
     }

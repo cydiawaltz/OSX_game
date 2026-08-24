@@ -8,7 +8,7 @@ public class WindowManager : MonoBehaviour
 {
     [SerializeField] List<GameObject> windows;//Start()時のnull参照回避策　statestoreに情報流したら以後は使わない
     //[SerializeField] GameObject windowbase;//上のwindowsの親オブジェクト
-    [SerializeField] List<Window> windows_statestore;//一個上のやつのWindowStateのインスタンス保持
+    public List<Window> windows_statestore;//一個上のやつのWindowStateのインスタンス保持
 
     [SerializeField] float defaultHeight;//ここは末端に合わせる
     public GameObject[] instantiateObject;//出る可能性のあるウインドウ(Assetに書き出し済みのやつ)
@@ -204,9 +204,19 @@ public class WindowManager : MonoBehaviour
             player.transform.position += new Vector3(0f, deltaY + 1.8f, 0f);
         }
         player_chara.enabled = true;
+        // ウインドウの並び順を描画順に反映
+        /*int baseQueue = 3000;
+
+        for (int i = 0; i < windows_statestore.Count; i++)
+        {
+            // 0番目が最前面なので、一番大きいRender Queueを与える
+            int queue = baseQueue + (windows_statestore.Count - 10 - i);
+
+            windows_statestore[i].SetRenderQueue(queue);
+        }*/
     }
 
-    public void FocusWindow()//ウインドウをクリックして最前列に
+    /*public void FocusWindow()//ウインドウをクリックして最前列に
     {
         //クリック位置をスクリーン座標→ワールド座標に変換してxz成分だけ使って判定　配列0(一番上)から順にやってく
         Vector3 mousePos = Input.mousePosition;
@@ -242,6 +252,47 @@ public class WindowManager : MonoBehaviour
             }
         }
 
+    }*/
+    public void FocusWindow()
+    {
+        Vector3 mousePos = Input.mousePosition;
+        Pre_SetWindowState();
+
+        for (int i = 0; i <= UIobjects.Count - 1; i++)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint(UIobjects[i], mousePos))
+            {
+                windows_statestore[0].isTopMost = true;
+                windows_statestore[0].ChangeWindowState();
+                Debug.Log("mouse on UI");
+                return;
+            }
+        }
+
+        for (int i = 0; i <= windows_statestore.Count - 1; i++)
+        {
+            bool istarget = windows_statestore[i].SetWindowState(mousePos);
+
+            if (istarget)
+            {
+                Window target = windows_statestore[i];
+
+                windows_statestore.RemoveAt(i);
+                windows_statestore.Insert(0, target);
+
+                SetWindowState();
+
+                foreach (Window state in windows_statestore)
+                {
+                    state.ChangeWindowState();
+                }
+
+                AppIndex = target.AppIndex;
+                changeIndexState?.Invoke();
+
+                break;
+            }
+        }
     }
     public void ChangeViewMode(bool isOverView)//表示を変更 引数は変更先が俯瞰か否か
     {
@@ -262,7 +313,7 @@ public class WindowManager : MonoBehaviour
 
         if (windows_statestore.Contains(newState))
         {
-            if(windows_statestore[0] == newState)
+            if (windows_statestore[0] == newState)
             {
                 return;
             }
