@@ -20,7 +20,7 @@ public class Dock : MonoBehaviour
     public bool isDelete;
     public int deleteindex;
 
-    void Start()
+    void Awake()
     {
         xScale = this.gameObject.transform.localScale.x;//半分
         Dock_render = GetComponent<Renderer>();

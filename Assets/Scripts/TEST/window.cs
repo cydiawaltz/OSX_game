@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.UI;
 using System.Collections;
 using System;
 
@@ -35,6 +33,8 @@ public class Window : MonoBehaviour
     float screenZ;
     private RectAngleSet rect;
     public SignalButton signal;
+    public Icon icon;
+    [SerializeField] bool isFinder;
 
     //debug
     public bool isChangeRadius;
@@ -242,5 +242,10 @@ public class Window : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.z = originalWidth / Mathf.Cos(radius * Mathf.Deg2Rad);
         transform.localScale = scale;
+    }
+    public void OnCloseWindow()
+    {
+        if(isFinder) return;
+        icon.QuitApp();
     }
 }

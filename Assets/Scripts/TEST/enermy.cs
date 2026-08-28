@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine.UI;
+using System;
 
 public class Enemy : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] Image HPbarFront;
     [SerializeField] GameObject target;
     [SerializeField] float destroyTime;
+    public Action OnDeath;
+    public GameObject flatparts;
+    bool isdead = false;
 
     void Start()
     {
@@ -28,6 +32,7 @@ public class Enemy : MonoBehaviour
         ShootingLoop();
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         maxHP = HP;
+        manager.changeVisualState+= Switch;
     }
 
     void Update()
@@ -37,6 +42,17 @@ public class Enemy : MonoBehaviour
         {
             Vector3 screenPos = maincam.WorldToScreenPoint(target.transform.position);
             bar.position = screenPos+offset_main;
+        }
+        if(HP <= 0)
+        {
+            OnDeath?.Invoke();
+            //StopAllCoroutines();
+            isdead = true;
+            this.gameObject.SetActive(false);
+            flatparts.SetActive(false);
+            //Destroy(this.gameObject);
+            bar.gameObject.SetActive(false);
+            this.enabled = false;
         }
     }
     void Switch()
@@ -56,7 +72,7 @@ public class Enemy : MonoBehaviour
     }
     async void ShootingLoop()
     {
-        while (true)
+        while (!isdead)
         {
             if (distance <= targetDistance)
             {

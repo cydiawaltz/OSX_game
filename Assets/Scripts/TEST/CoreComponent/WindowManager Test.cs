@@ -343,6 +343,7 @@ public class WindowManager : MonoBehaviour
             windows_statestore.Remove(targetWindow);
             targetWindow.gameObject.SetActive(false);
             SetWindowState();
+            targetWindow.OnCloseWindow();
             changeIndexState?.Invoke();
         }
     }

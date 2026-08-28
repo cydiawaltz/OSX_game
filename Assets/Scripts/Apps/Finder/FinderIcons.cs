@@ -5,6 +5,7 @@ using System.Collections;
 public class FinderIcons : MonoBehaviour
 {
     WindowManager manager;
+    [SerializeField] Window parent;
     [SerializeField] Renderer thisObj;
     [SerializeField] Texture[] textures;//0が通常、1が一回クリック
     [SerializeField] RectAngleSet rectangle;
@@ -26,6 +27,7 @@ public class FinderIcons : MonoBehaviour
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         thisObj = this.GetComponent<Renderer>();
         rectangle = FunctionSet.GetRectAngle(this.gameObject,WindowManager.overCam);
+        parent.OnDragEnd += () => { rectangle = FunctionSet.GetRectAngle(this.gameObject,WindowManager.overCam); };
     }
 
     // Update is called once per frame

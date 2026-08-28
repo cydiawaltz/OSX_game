@@ -170,7 +170,11 @@ public class Icon : MonoBehaviour//iconにアタッチ
     }
     IEnumerator StartorBackToAppCoroutine()
     {
-        
+        if(!allowStarting||isLaunched)
+        {
+            Manager.EnableWindowAsNewWindow(window);
+            yield break;
+        }
         //window.SetActive(true);
         yield return StartCoroutine(DoBounce());
         if (!isLaunched)
@@ -294,5 +298,13 @@ public class Icon : MonoBehaviour//iconにアタッチ
         yield return seq.WaitForCompletion();
         yield return new WaitForSeconds(WaitTimes);
         transform.position = basePos;
+    }
+    public void QuitApp()
+    {
+        if (isLaunched)
+        {
+            status.SetActive(false);
+        }
+        isLaunched = false;
     }
 }
