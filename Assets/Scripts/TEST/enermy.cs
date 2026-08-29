@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Enemy : MonoBehaviour
     [Header("カメラはインスペクターでアサイン")]
     [SerializeField] Camera maincam;
     [SerializeField] Camera overViewCam;
-    public Vector3 offset_main,offset_over;//カメラの位置調整用
+    public Vector3 offset_main, offset_over;//カメラの位置調整用
     [SerializeField] RectTransform bar;
     [SerializeField] Image HPbarFront;
     [SerializeField] GameObject target;
@@ -32,18 +33,18 @@ public class Enemy : MonoBehaviour
         ShootingLoop();
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         maxHP = HP;
-        manager.changeVisualState+= Switch;
+        manager.changeVisualState += Switch;
     }
 
     void Update()
     {
         distance = Vector3.Distance(player.transform.position, this.transform.position);
-        if(!manager.IsOverView)
+        if (!manager.IsOverView)
         {
             Vector3 screenPos = maincam.WorldToScreenPoint(target.transform.position);
-            bar.position = screenPos+offset_main;
+            bar.position = screenPos + offset_main;
         }
-        if(HP <= 0)
+        if (HP <= 0)
         {
             OnDeath?.Invoke();
             //StopAllCoroutines();
@@ -57,7 +58,7 @@ public class Enemy : MonoBehaviour
     }
     void Switch()
     {
-        if(manager.IsOverView)
+        if (manager.IsOverView)
         {
             bar.gameObject.SetActive(false);
             //Vector3 screenPos = overViewCam.WorldToScreenPoint(this.transform.position);
@@ -70,19 +71,20 @@ public class Enemy : MonoBehaviour
             //bar.position = screenPos+offset_main;
         }
     }
-    async void ShootingLoop()
+    IEnumerator ShootingLoop()
     {
         while (!isdead)
         {
-            if (distance <= targetDistance)
-            {
-                Vector3 targetPos = player.transform.position;
-                targetPos.y = transform.position.y;
-                transform.DOLookAt(targetPos, 0.5f);
-                await Task.Delay(500);
-                InjectBullet();
-            }
-            await Task.Delay(2000);
+                if (distance <= targetDistance)
+                {
+                    Vector3 targetPos = player.transform.position;
+                    
+                    targetPos.y = transform.position.y;
+                    transform.DOLookAt(targetPos, 0.5f);
+                    yield return new WaitForSeconds(0.3f);
+                    InjectBullet();
+                }
+                
         }
     }
 
@@ -107,7 +109,7 @@ public class Enemy : MonoBehaviour
                 Debug.Log("Classic is started(bullet)");
             }
         }
-        else if(other.gameObject.CompareTag("Player"))
+        else if (other.gameObject.CompareTag("Player"))
         {
             HP -= 2;
             if (HP <= 0)
