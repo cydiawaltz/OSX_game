@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class airstickersystemTEST : MonoBehaviour
 {
-    [Header("デカール設定")]
+    /*[Header("デカール設定")]
 
     [Tooltip("使用するデカールマテリアルの配列（ランダムに選ばれます）")]
     [SerializeField] private Material[] shotDecalMaterials;
@@ -66,5 +66,5 @@ public class airstickersystemTEST : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 }

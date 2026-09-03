@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 public class WindowManager : MonoBehaviour
 {
@@ -29,6 +31,14 @@ public class WindowManager : MonoBehaviour
     Window currentWindow;
     public int AppIndex;
     public float playerOffset;
+    [Header("以下、framecountまで開始・終了時処理")]
+    [SerializeField] GameObject[] menubarBases;
+    [SerializeField] float menubarMoveDist;
+    [SerializeField] GameObject DockBase;
+    [SerializeField] float DockMoveDist;
+    [SerializeField] float moveduration;
+    [SerializeField] Ease ease;
+    [SerializeField] GameObject[] backs;
     //debug
     public int frameCount;
     /*
@@ -69,6 +79,7 @@ public class WindowManager : MonoBehaviour
         //player_rigidbody = player.GetComponent<Rigidbody>();
         IsOverView = true;
         playerCamera.SetActive(false);
+        StartCoroutine(StartGame());
     }
 
 
@@ -358,4 +369,120 @@ public class WindowManager : MonoBehaviour
         windows_statestore.Insert(0,window);
         SetWindowState();
     }*/
+    public IEnumerator CloseGame(bool isWin)
+    {
+        for (int i = windows_statestore.Count - 1; i >= 0; i--)
+        {
+            Window window = windows_statestore[i];
+
+            if (window != null)
+            {
+                window.gameObject.SetActive(false);
+            }
+
+            //windows_statestore.RemoveAt(i);
+            Debug.Log("Remove window:"+window.gameObject.name);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        var sequence = DOTween.Sequence();
+
+        foreach (var item in menubarBases)
+        {
+            sequence.Join(
+                item.transform
+                    .DOMoveZ(
+                        item.transform.position.z - menubarMoveDist,
+                        moveduration,
+                        true
+                    )
+                    .SetEase(ease)
+            );
+            Debug.Log("sequence joined:"+item.name);
+        }
+
+        sequence.Append(
+            DockBase.transform
+                .DOMoveZ(
+                    DockBase.transform.position.z + DockMoveDist,
+                    moveduration,
+                    true
+                )
+                .SetEase(ease)
+        );
+        Debug.Log("sequence joined:"+DockBase.name);
+
+        sequence.Play();
+
+        yield return sequence.WaitForCompletion();
+        Debug.Log("sequence played");
+
+        yield return new WaitForSeconds(1.0f);
+
+        foreach (GameObject back in backs)
+        {
+            back.SetActive(false);
+            Debug.Log("Back disable");
+        }
+
+        yield return new WaitForSeconds(1.0f);
+        Debug.Log("NameEntry");
+        if (isWin)
+        {
+            // ネームエントリーへ
+        }
+        else
+        {
+            // タイトルへ
+        }
+    }
+    IEnumerator StartGame()
+    {
+        foreach (GameObject back in backs)
+        {
+            back.SetActive(false);
+        }
+        foreach (var item in menubarBases)
+        {
+            item.transform.position = new Vector3(item.transform.position.x,item.transform.position.y,item.transform.position.z-menubarMoveDist);
+        }
+        DockBase.transform.position = new Vector3(DockBase.transform.position.x,DockBase.transform.position.y,DockBase.transform.position.z+DockMoveDist);
+
+        yield return new WaitForSeconds(0.2f);
+        foreach (GameObject back in backs)
+        {
+            back.SetActive(true);
+        }
+        yield return new WaitForSeconds(1.0f);
+        var sequence = DOTween.Sequence();
+
+        foreach (var item in menubarBases)
+        {
+            sequence.Join(
+                item.transform
+                    .DOMoveZ(
+                        item.transform.position.z + menubarMoveDist,
+                        moveduration,
+                        true
+                    )
+                    .SetEase(ease)
+            );
+            Debug.Log("sequence joined:"+item.name);
+        }
+
+        sequence.Append(
+            DockBase.transform
+                .DOMoveZ(
+                    DockBase.transform.position.z - DockMoveDist,
+                    moveduration,
+                    true
+                )
+                .SetEase(ease)
+        );
+        Debug.Log("sequence joined:"+DockBase.name);
+
+        sequence.Play();
+
+        yield return sequence.WaitForCompletion();
+    }
 }

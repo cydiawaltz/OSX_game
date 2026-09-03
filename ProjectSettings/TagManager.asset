@@ -9,6 +9,8 @@ TagManager:
   - E_shikigami
   - P_shikigami
   - Enemy
+  - Mizushi
+  - door
   layers:
   - Default
   - TransparentFX

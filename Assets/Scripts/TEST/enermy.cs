@@ -30,29 +30,33 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player");
-        ShootingLoop();
+        //ShootingLoop();
+        
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         maxHP = HP;
         manager.changeVisualState += Switch;
+        StartCoroutine(ShootingLoop());
     }
 
     void Update()
     {
+        if (player == null) return;
         distance = Vector3.Distance(player.transform.position, this.transform.position);
         if (!manager.IsOverView)
         {
             Vector3 screenPos = maincam.WorldToScreenPoint(target.transform.position);
             bar.position = screenPos + offset_main;
         }
-        if (HP <= 0)
+        if (HP <= 0 && !isdead)
         {
             OnDeath?.Invoke();
-            //StopAllCoroutines();
+            StopAllCoroutines();
             isdead = true;
-            this.gameObject.SetActive(false);
             flatparts.SetActive(false);
             //Destroy(this.gameObject);
+            manager.changeVisualState -= Switch;
             bar.gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
             this.enabled = false;
         }
     }
@@ -75,21 +79,32 @@ public class Enemy : MonoBehaviour
     {
         while (!isdead)
         {
-                if (distance <= targetDistance)
+            yield return null;
+            if (distance <= targetDistance)
+            {
+                if (player != null)
                 {
                     Vector3 targetPos = player.transform.position;
-                    
                     targetPos.y = transform.position.y;
                     transform.DOLookAt(targetPos, 0.5f);
-                    yield return new WaitForSeconds(0.3f);
+                    yield return new WaitForSeconds(0.6f);
+                    if (isdead || !gameObject.activeInHierarchy)
+                        yield break;
                     InjectBullet();
                 }
-                
+            }
+            yield return new WaitForSeconds(1.0f);
+            yield return null;
         }
     }
 
     public void InjectBullet()
     {
+        if (isdead || !gameObject.activeInHierarchy)
+            return;
+
+        if (bullet == null)
+            return;
         GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
         Rigidbody rb = shell.GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * bulletSpeed);
@@ -118,6 +133,20 @@ public class Enemy : MonoBehaviour
                 Debug.Log("Classic is started(player)");
             }
         }
+        else if(other.gameObject.CompareTag("Mizushi"))
+        {
+            HP-=5;
+            Destroy(other.gameObject);
+            if (HP <= 0)
+            {
+                // GameOver処理
+                Debug.Log("Classic is started(player)");
+            }
+        }
         HPbarFront.fillAmount = (float)HP / maxHP; // HPバーの更新（例: HPが100の場合）
+    }
+    void OnDestroy()
+    {
+        DOTween.Kill(transform);
     }
 }
