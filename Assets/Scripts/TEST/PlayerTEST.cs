@@ -37,6 +37,10 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject disappear;
     [SerializeField] Renderer[] playerrenderers;
     bool isWinned;
+    [SerializeField] float rotationSensitivity = 0.3f;
+    private Vector3 lastMousePosition;
+    private bool isRotating;
+    public GameObject centerObject;
 
     void Start()
     {
@@ -50,9 +54,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if(enemy == null)
+        if (enemy == null)
         {
-            if(!isWinned)
+            if (!isWinned)
             {
                 isWinned = true;
                 //StartCoroutine(OnWin());
@@ -60,11 +64,11 @@ public class Player : MonoBehaviour
         }
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
-        if(this.transform.position.y <= -10)
+        if (this.transform.position.y <= -10)
         {
             controller.enabled = false;
             Debug.Log("respawn");
-            this.transform.position = new Vector3(0,20,0);
+            this.transform.position = new Vector3(0, 20, 0);
             controller.enabled = true;
         }
         if (controller.isGrounded)
@@ -98,7 +102,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            InjectBullet();
+            InjectBulletDown();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            InjectBulletUp();
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -109,10 +117,30 @@ public class Player : MonoBehaviour
             Vector3 screenPos = maincam.WorldToScreenPoint(this.transform.position);
             bar.position = screenPos + offset_main;
         }
-        if(HP == 0)
+        if (HP == 0)
         {
             StartCoroutine(OnDeath());
             HP--;
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            lastMousePosition = Input.mousePosition;
+            isRotating = true;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            isRotating = false;
+        }
+
+        if (isRotating)
+        {
+            Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
+
+            // 横方向の移動量だけを使用してY軸回転
+            centerObject.gameObject.transform.Rotate(0f, mouseDelta.x * rotationSensitivity, 0f);
+
+            lastMousePosition = Input.mousePosition;
         }
     }
     void Switch()
@@ -131,11 +159,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void InjectBullet()
+    public void InjectBulletDown()
     {
         GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
         Rigidbody rb = shell.GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * bulletSpeed);
+        Destroy(shell, 8.0f);
+    }
+    public void InjectBulletUp()
+    {
+        GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
+        Rigidbody rb = shell.GetComponent<Rigidbody>();
+        Vector3 direction = Quaternion.Euler(0, 90, 0) * transform.forward;
+        rb.AddForce(direction * bulletSpeed);
         Destroy(shell, 8.0f);
     }
     void OnCollisionEnter(Collision other)
@@ -159,7 +195,7 @@ public class Player : MonoBehaviour
                     Debug.Log("Game Over(Enemy)");
                 }
             }
-            else if(other.gameObject.CompareTag("door"))
+            else if (other.gameObject.CompareTag("door"))
             {
                 Debug.Log("EnterDoor");
                 StartCoroutine(OnWin());
@@ -203,11 +239,11 @@ public class Player : MonoBehaviour
         Debug.Log("you died");
         maincam.transform.parent = null;
         manager.OnChangeView();
-        foreach(var p in playerrenderers)
+        foreach (var p in playerrenderers)
         {
             p.enabled = false;
         }
-        var pos = new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z);
+        var pos = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         var instance = Instantiate(disappear, pos, Quaternion.identity);
         var d = instance.GetComponent<disappear>();
         d.pCamera = maincam.gameObject;
@@ -222,11 +258,11 @@ public class Player : MonoBehaviour
         Debug.Log("you died");
         maincam.transform.parent = null;
         manager.OnChangeView();
-        foreach(var p in playerrenderers)
+        foreach (var p in playerrenderers)
         {
             p.enabled = false;
         }
-        var pos = new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z);
+        var pos = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         var instance = Instantiate(disappear, pos, Quaternion.identity);
         var d = instance.GetComponent<disappear>();
         d.pCamera = maincam.gameObject;

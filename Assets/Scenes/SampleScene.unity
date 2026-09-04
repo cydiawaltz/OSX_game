@@ -14335,6 +14335,8 @@ MonoBehaviour:
   - {fileID: 785041133}
   - {fileID: 1172142311}
   - {fileID: 734907963}
+  rotationSensitivity: 0.3
+  centerObject: {fileID: 330585543}
 --- !u!143 &1788434779
 CharacterController:
   m_ObjectHideFlags: 0
@@ -15330,7 +15332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
-  player: {fileID: 1788434777}
+  player: {fileID: 1788434778}
   target: {fileID: 1146141640}
   dist: 0.3
 --- !u!1 &1909764675
@@ -19137,7 +19139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1530953250320356849
 GameObject:
   m_ObjectHideFlags: 0
@@ -27256,6 +27258,7 @@ GameObject:
   - component: {fileID: 7746338103450467901}
   - component: {fileID: 7746338103450467902}
   - component: {fileID: 7746338103450467903}
+  - component: {fileID: 7746338103450467904}
   m_Layer: 0
   m_Name: preview
   m_TagString: Untagged
@@ -28928,6 +28931,31 @@ MonoBehaviour:
   center: {fileID: 8035219844372034094}
   radius: 0.2
   pushcolor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &7746338103450467904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6974762842915120263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ced1475f1be284ff08f614861a035ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrolltarget: []
+  minUV: {x: 0, y: 0}
+  maxUV: {x: 0, y: 0}
+  maxBar: 0
+  minBar: 0
+  currentPos: 0
+  scrollBar: {fileID: 0}
+  local: {x: 0, y: 0}
+  oldLocal: {x: 0, y: 0}
+  pullDownColor: {r: 0, g: 0, b: 0, a: 0}
+  isdragging: 0
+  topUV: {x: 0, y: 0}
+  bottomUV: {x: 0, y: 0}
 --- !u!4 &7789544248138933486
 Transform:
   m_ObjectHideFlags: 0

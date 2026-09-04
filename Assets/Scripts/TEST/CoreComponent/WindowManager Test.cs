@@ -26,6 +26,7 @@ public class WindowManager : MonoBehaviour
     public static Camera playerCam;
     public Action changeVisualState;
     public Action changeIndexState;
+    public Action OnEndTransition;
     [SerializeField] List<RectTransform> UIobjects;
     float previousWindowY;
     Window currentWindow;
@@ -484,5 +485,6 @@ public class WindowManager : MonoBehaviour
         sequence.Play();
 
         yield return sequence.WaitForCompletion();
+        OnEndTransition.Invoke();
     }
 }

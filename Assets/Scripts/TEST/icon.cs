@@ -119,6 +119,11 @@ public class Icon : MonoBehaviour//iconにアタッチ
         {
             targetWindow = window.GetComponent<Window>();
         }
+        Manager.OnEndTransition+=redoSetRect;
+    }
+    void redoSetRect()
+    {
+        rect = FunctionSet.GetRectAngle(this.gameObject, WindowManager.overCam);
     }
     void Update()
     {

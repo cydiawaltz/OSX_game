@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 
-public class Enermy_shikigami : MonoBehaviour 
+public class Enermy_shikigami : MonoBehaviour
 {
     /*public Camera OverViewCamera;//俯瞰かめら
     public float width;//横幅・縦幅 
@@ -18,6 +18,7 @@ public class Enermy_shikigami : MonoBehaviour
     [SerializeField] float old_velocityY;
     [SerializeField] GameObject destroyObject;//消えるときのエフェクト
     public GameObject pCamera, oCamera;//disappear.csに渡すやつ
+    [SerializeField] float jumpHeightPerY = 1.0f;
 
     void Start()
     {
@@ -48,7 +49,7 @@ public class Enermy_shikigami : MonoBehaviour
     void Update()
     {
         velocityY = rb.linearVelocity.y;
-        if(velocityY ==0&&old_velocityY == 0)//静止してる時
+        if (velocityY == 0 && old_velocityY == 0)//静止してる時
         {
             isJumping = false;
         }
@@ -83,13 +84,16 @@ public class Enermy_shikigami : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
 
         // 前方向＋上方向へジャンプ
-        Vector3 force = direction * forwardForce + Vector3.up * jumpForce;
+        float yDifference = player.transform.position.y - transform.position.y;
+        float currentJumpForce = jumpForce + Mathf.Max(0f, yDifference) * jumpHeightPerY;
+
+        Vector3 force = direction * forwardForce + Vector3.up * currentJumpForce;
         rb.AddForce(force, ForceMode.VelocityChange);
     }
     void OnDestroy()
     {
         StopAllCoroutines();
-        var pos = new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z);
+        var pos = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         var instance = Instantiate(destroyObject, pos, Quaternion.identity);
         var d = instance.GetComponent<disappear>();
         d.pCamera = pCamera;

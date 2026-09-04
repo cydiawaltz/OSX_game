@@ -52,6 +52,16 @@ public class menubar : MonoBehaviour//子側　
         {
             Debug.LogWarning("command Menuがねぇ"+e+"及び:"+gameObject.name);
         }*/
+        manager.OnEndTransition+=redoSetRect;
+    }
+    void redoSetRect()
+    {
+        for(int i = 0; i < elementsHit.Count; i++)
+        {
+            //elementsHit.Add(FunctionSet.GetRectAngle(elements[i].gameObject,WindowManager.overCam));
+            elementsHit[i] = FunctionSet.GetRectAngle(elements[i].gameObject,WindowManager.overCam;
+            Debug.Log("メニューバーの長方形"+i);
+        }
     }
     
     void Update()

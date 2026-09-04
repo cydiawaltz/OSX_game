@@ -26,12 +26,14 @@ public class Enemy : MonoBehaviour
     public Action OnDeath;
     public GameObject flatparts;
     bool isdead = false;
+    [SerializeField] float minShootInterval = 0.2f;
+    [SerializeField] float maxShootInterval = 2.0f;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
         //ShootingLoop();
-        
+
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         maxHP = HP;
         manager.changeVisualState += Switch;
@@ -76,27 +78,41 @@ public class Enemy : MonoBehaviour
         }
     }
     IEnumerator ShootingLoop()
+{
+    while (!isdead)
     {
-        while (!isdead)
+        yield return null;
+
+        if (distance <= targetDistance)
         {
-            yield return null;
-            if (distance <= targetDistance)
+            if (player != null)
             {
-                if (player != null)
-                {
-                    Vector3 targetPos = player.transform.position;
-                    targetPos.y = transform.position.y;
-                    transform.DOLookAt(targetPos, 0.5f);
-                    yield return new WaitForSeconds(0.6f);
-                    if (isdead || !gameObject.activeInHierarchy)
-                        yield break;
-                    InjectBullet();
-                }
+                Vector3 targetPos = player.transform.position;
+                targetPos.y = transform.position.y;
+                transform.DOLookAt(targetPos, 0.3f);
+
+                yield return new WaitForSeconds(0.2f);
+
+                if (isdead || !gameObject.activeInHierarchy)
+                    yield break;
+
+                InjectBullet();
             }
-            yield return new WaitForSeconds(1.0f);
-            yield return null;
+
+            // 距離に応じて射撃間隔を変更
+            float t = Mathf.Clamp01(distance / targetDistance);
+            float shootInterval = Mathf.Lerp(minShootInterval, maxShootInterval, t);
+
+            yield return new WaitForSeconds(shootInterval);
         }
+        else
+        {
+            yield return new WaitForSeconds(maxShootInterval);
+        }
+
+        yield return null;
     }
+}
 
     public void InjectBullet()
     {
@@ -133,9 +149,9 @@ public class Enemy : MonoBehaviour
                 Debug.Log("Classic is started(player)");
             }
         }
-        else if(other.gameObject.CompareTag("Mizushi"))
+        else if (other.gameObject.CompareTag("Mizushi"))
         {
-            HP-=5;
+            HP -= 5;
             Destroy(other.gameObject);
             if (HP <= 0)
             {
