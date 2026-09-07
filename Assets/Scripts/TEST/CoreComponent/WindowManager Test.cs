@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using System;
 using DG.Tweening;
+using UnityEngine.Rendering.Universal;
 
 public class WindowManager : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class WindowManager : MonoBehaviour
     [SerializeField] float moveduration;
     [SerializeField] Ease ease;
     [SerializeField] GameObject[] backs;
+    public DecalProjector playerShadow;
     //debug
     public int frameCount;
     /*
@@ -56,6 +58,7 @@ public class WindowManager : MonoBehaviour
     bool isMoveplayer;
     Window current;
     float oldWindowPos;
+    bool cantTouch;
     //[SerializeField] bool isFirstFrame = true;//Update()で処理　Start()で初期化するとパス通んない説
     void Awake()
     {
@@ -158,6 +161,8 @@ public class WindowManager : MonoBehaviour
     }
     void Pre_SetWindowState()//CheckWindowState()呼ぶ前に必ず呼ぶ　初期化用関数
     {
+        if (cantTouch)
+            return;
         //プレイヤー処理
         Vector2 playerScreenPos = WindowManager.overCam.WorldToScreenPoint(player.transform.position);
         //playerScreenPos = new Vector2(playerScreenPos.x - Screen.width / 2, playerScreenPos.y);
@@ -217,7 +222,7 @@ public class WindowManager : MonoBehaviour
         }
         player_chara.enabled = true;
         // ウインドウの並び順を描画順に反映
-        /*int baseQueue = 3000;
+        int baseQueue = 3000;
 
         for (int i = 0; i < windows_statestore.Count; i++)
         {
@@ -225,7 +230,7 @@ public class WindowManager : MonoBehaviour
             int queue = baseQueue + (windows_statestore.Count - 10 - i);
 
             windows_statestore[i].SetRenderQueue(queue);
-        }*/
+        }
     }
 
     /*public void FocusWindow()//ウインドウをクリックして最前列に
@@ -372,6 +377,8 @@ public class WindowManager : MonoBehaviour
     }*/
     public IEnumerator CloseGame(bool isWin)
     {
+        cantTouch = true;
+        playerShadow.enabled = false;
         for (int i = windows_statestore.Count - 1; i >= 0; i--)
         {
             Window window = windows_statestore[i];
@@ -382,7 +389,7 @@ public class WindowManager : MonoBehaviour
             }
 
             //windows_statestore.RemoveAt(i);
-            Debug.Log("Remove window:"+window.gameObject.name);
+            Debug.Log("Remove window:" + window.gameObject.name);
             yield return new WaitForSeconds(0.2f);
         }
 
@@ -399,7 +406,7 @@ public class WindowManager : MonoBehaviour
                     )
                     .SetEase(ease)
             );
-            Debug.Log("sequence joined:"+item.name);
+            Debug.Log("sequence joined:" + item.name);
         }
 
         sequence.Append(
@@ -411,7 +418,7 @@ public class WindowManager : MonoBehaviour
                 )
                 .SetEase(ease)
         );
-        Debug.Log("sequence joined:"+DockBase.name);
+        Debug.Log("sequence joined:" + DockBase.name);
 
         sequence.Play();
 
@@ -439,15 +446,17 @@ public class WindowManager : MonoBehaviour
     }
     IEnumerator StartGame()
     {
+        playerShadow.enabled = false;
+        cantTouch = true;
         foreach (GameObject back in backs)
         {
             back.SetActive(false);
         }
         foreach (var item in menubarBases)
         {
-            item.transform.position = new Vector3(item.transform.position.x,item.transform.position.y,item.transform.position.z-menubarMoveDist);
+            item.transform.position = new Vector3(item.transform.position.x, item.transform.position.y, item.transform.position.z - menubarMoveDist);
         }
-        DockBase.transform.position = new Vector3(DockBase.transform.position.x,DockBase.transform.position.y,DockBase.transform.position.z+DockMoveDist);
+        DockBase.transform.position = new Vector3(DockBase.transform.position.x, DockBase.transform.position.y, DockBase.transform.position.z + DockMoveDist);
 
         yield return new WaitForSeconds(0.2f);
         foreach (GameObject back in backs)
@@ -455,6 +464,7 @@ public class WindowManager : MonoBehaviour
             back.SetActive(true);
         }
         yield return new WaitForSeconds(1.0f);
+        playerShadow.enabled = true;
         var sequence = DOTween.Sequence();
 
         foreach (var item in menubarBases)
@@ -468,7 +478,7 @@ public class WindowManager : MonoBehaviour
                     )
                     .SetEase(ease)
             );
-            Debug.Log("sequence joined:"+item.name);
+            Debug.Log("sequence joined:" + item.name);
         }
 
         sequence.Append(
@@ -480,11 +490,12 @@ public class WindowManager : MonoBehaviour
                 )
                 .SetEase(ease)
         );
-        Debug.Log("sequence joined:"+DockBase.name);
+        Debug.Log("sequence joined:" + DockBase.name);
 
         sequence.Play();
 
         yield return sequence.WaitForCompletion();
         OnEndTransition.Invoke();
+        cantTouch = false;
     }
 }

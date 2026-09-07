@@ -43,6 +43,8 @@ public class Icon : MonoBehaviour//iconにアタッチ
     [SerializeField] SignalButton signal;
     [SerializeField] bool bounceOnly; // バウンドだけして起動しない
     Window targetWindow;
+    public bool isstarting = false;
+    public bool isOpenHP;
 
     void Start()
     {
@@ -175,11 +177,12 @@ public class Icon : MonoBehaviour//iconにアタッチ
     }
     IEnumerator StartorBackToAppCoroutine()
     {
-        if(!allowStarting||isLaunched)
+        if(!allowStarting||isLaunched||isstarting)
         {
             Manager.EnableWindowAsNewWindow(window);
             yield break;
         }
+        isstarting = true;
         //window.SetActive(true);
         yield return StartCoroutine(DoBounce());
         if (!isLaunched)
@@ -189,6 +192,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
         isLaunched = true;
         yield return new WaitForSeconds(0.8f);
         Manager.EnableWindowAsNewWindow(window);
+        isstarting = false;
     }
     IEnumerator ClickButtonDown(bool isactive)
     {
@@ -211,7 +215,13 @@ public class Icon : MonoBehaviour//iconにアタッチ
 
         // ゴミ箱などは起動しない
         if (isUnLaunchedIcon)
+        {
+            if(isOpenHP)
+            {
+                Application.OpenURL("https://wattzmaro.github.io/");
+            }
             yield break;
+        }
 
         // 初回起動
         // バウンド

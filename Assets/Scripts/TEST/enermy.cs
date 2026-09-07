@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
     bool isdead = false;
     [SerializeField] float minShootInterval = 0.2f;
     [SerializeField] float maxShootInterval = 2.0f;
+    public float Difficulty;//外部から設定
 
     void Start()
     {
@@ -103,11 +104,11 @@ public class Enemy : MonoBehaviour
             float t = Mathf.Clamp01(distance / targetDistance);
             float shootInterval = Mathf.Lerp(minShootInterval, maxShootInterval, t);
 
-            yield return new WaitForSeconds(shootInterval);
+            yield return new WaitForSeconds(shootInterval*Difficulty);
         }
         else
         {
-            yield return new WaitForSeconds(maxShootInterval);
+            yield return new WaitForSeconds(maxShootInterval*Difficulty);
         }
 
         yield return null;

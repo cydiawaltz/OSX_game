@@ -89,6 +89,10 @@ public class FinderIcons : MonoBehaviour
         /*yield return new WaitForSeconds(RagTime);
         //Preview.SetActive(true);
         manager.EnableWindowAsNewWindow(Preview);*/
+        if(previewIcon.isstarting)
+        {
+            return;
+        }
         previewIcon.StartorBackToApp();
     }
 }

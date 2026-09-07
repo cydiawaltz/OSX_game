@@ -21,13 +21,5 @@ public class SimpleText : MonoBehaviour
             StartCoroutine(player.OnWin());
         }
     }
-    void Switch()
-    {
-        
-    }
-    void OnControllerColliderHit(Collision other)
-    {
-        StartCoroutine(manager.CloseGame(true));
-    }
     
 }

@@ -133,7 +133,7 @@ public class Player : MonoBehaviour
             isRotating = false;
         }
 
-        if (isRotating)
+        if (isRotating&&!manager.IsOverView)
         {
             Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
 
@@ -238,6 +238,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log("you died");
         maincam.transform.parent = null;
+        manager.IsOverView = false;
         manager.OnChangeView();
         foreach (var p in playerrenderers)
         {
@@ -255,8 +256,9 @@ public class Player : MonoBehaviour
     }
     public IEnumerator OnWin()
     {
-        Debug.Log("you died");
+        Debug.Log("you win!gimukyoiku lose!");
         maincam.transform.parent = null;
+        manager.IsOverView = false;
         manager.OnChangeView();
         foreach (var p in playerrenderers)
         {
