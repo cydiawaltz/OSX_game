@@ -458,7 +458,7 @@ public class WindowManager : MonoBehaviour
         }
         DockBase.transform.position = new Vector3(DockBase.transform.position.x, DockBase.transform.position.y, DockBase.transform.position.z + DockMoveDist);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1.0f);
         foreach (GameObject back in backs)
         {
             back.SetActive(true);

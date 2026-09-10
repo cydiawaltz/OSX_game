@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - Mizushi
   - door
+  - State
   layers:
   - Default
   - TransparentFX

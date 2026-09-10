@@ -6,6 +6,7 @@ using System.Collections;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
+    [SerializeField] StateStore stateStore;
     public float JumpPower = 10;
     public float gravity = 20;
     public float speed = 6.0f;
@@ -41,15 +42,26 @@ public class Player : MonoBehaviour
     private Vector3 lastMousePosition;
     private bool isRotating;
     public GameObject centerObject;
+    bool notUseStateStore;
 
     void Start()
     {
+        stateStore = GameObject.FindWithTag("State").GetComponent<StateStore>();
+        if (stateStore == null)
+        {
+            notUseStateStore = true;
+        }
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         controller = GetComponent<CharacterController>();
         originalPos = cameraTransform.position - transform.position;
         maxHP = HP;
         manager.changeVisualState += Switch;
         Syouin.enabled = false; SekaizanText.enabled = false; Eisyou.enabled = false;
+        if(!notUseStateStore)
+        {
+            stateStore.MaxHP = maxHP;
+            stateStore.StartGame();
+        }
     }
 
     void Update()
@@ -133,7 +145,7 @@ public class Player : MonoBehaviour
             isRotating = false;
         }
 
-        if (isRotating&&!manager.IsOverView)
+        if (isRotating && !manager.IsOverView)
         {
             Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
 
@@ -161,6 +173,10 @@ public class Player : MonoBehaviour
 
     public void InjectBulletDown()
     {
+        if(!notUseStateStore)
+        {
+            stateStore.bulletCount++;
+        }
         GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
         Rigidbody rb = shell.GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * bulletSpeed);
@@ -168,9 +184,13 @@ public class Player : MonoBehaviour
     }
     public void InjectBulletUp()
     {
+        if(!notUseStateStore)
+        {
+            stateStore.bulletCount++;
+        }
         GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
         Rigidbody rb = shell.GetComponent<Rigidbody>();
-        Vector3 direction = Quaternion.Euler(0, 90, 0) * transform.forward;
+        Vector3 direction = Quaternion.Euler(0, 180, 0) * transform.forward;
         rb.AddForce(direction * bulletSpeed);
         Destroy(shell, 8.0f);
     }
@@ -181,6 +201,7 @@ public class Player : MonoBehaviour
             if (other.gameObject.CompareTag("E_shikigami"))
             {
                 HP -= 1; // ヒットポイントを減らす
+
                 Destroy(other.gameObject); // 弾を破壊
                 if (HP <= 0)
                 {
@@ -199,6 +220,11 @@ public class Player : MonoBehaviour
             {
                 Debug.Log("EnterDoor");
                 StartCoroutine(OnWin());
+                return;
+            }
+            if (!notUseStateStore)
+            {
+                stateStore.HP = HP;
             }
         }
         catch (Exception e)
@@ -256,6 +282,10 @@ public class Player : MonoBehaviour
     }
     public IEnumerator OnWin()
     {
+        if(!notUseStateStore)
+        {
+            stateStore.EndGame();
+        }
         Debug.Log("you win!gimukyoiku lose!");
         maincam.transform.parent = null;
         manager.IsOverView = false;

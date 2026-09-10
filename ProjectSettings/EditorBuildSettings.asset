@@ -9,6 +9,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Home.unity
     guid: cae95abcdac584511a5271677baf2fd9
   - enabled: 1
+    path: Assets/Scenes/10.1.unity
+    guid: 76bdad471501748448d81f44e904ce3c
+  - enabled: 1
+    path: Assets/Scenes/Ranking.unity
+    guid: 2a98c2eeb6f6c428591a4519f971dde1
+  - enabled: 1
+    path: Assets/Scenes/NameEntry.unity
+    guid: 32420f423ffbe405d8c193f8e9065e66
+  - enabled: 1
+    path: Assets/Scenes/10.1Pre.unity
+    guid: 15a8609f86b6444b89529cbfabcb0b5b
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:

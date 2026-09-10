@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Video;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class OP : MonoBehaviour
 {
@@ -11,35 +13,53 @@ public class OP : MonoBehaviour
     [SerializeField] float videoLoopTime;
     [SerializeField] float enableBaseTime;
     [SerializeField] GameObject baseObj;
+    [SerializeField] bool isReadingHowto;
+    [SerializeField] Image howtoImage;
+    [SerializeField] Sprite[] howtoSprites;
+
+    public int howtoSpriteIndex = 0;
     bool trigger = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartCoroutine(StartSet());
-        
+
+    }
+    void Update()
+    {
+        //debug
+        if(Input.GetKeyDown(KeyCode.D)&&Input.GetKey(KeyCode.LeftShift))
+        {
+            EnableYoukoso();
+        }
+        if(vp.time >= enableBaseTime&&!trigger)
+        {
+            trigger = true;
+            EnableYoukoso();
+        }
     }
     IEnumerator StartSet()
     {
         baseObj.SetActive(false);
-
+        DisableHowto();
         vp.Stop();
         vp.time = 0;
 
-        // æ‚ÉƒCƒxƒ“ƒg‚ğ“o˜^
+        // ï¿½ï¿½ÉƒCï¿½xï¿½ï¿½ï¿½gï¿½ï¿½oï¿½^
         vp.loopPointReached += Vp_loopPointReached;
 
-        // “®‰æ‚ğ€”õ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         vp.Prepare();
 
-        // €”õŠ®—¹‚Ü‚Å‘Ò‚Â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚Å‘Ò‚ï¿½
         while (!vp.isPrepared)
             yield return null;
 
-        // 0•b‚©‚çÄ¶
+        // 0ï¿½bï¿½ï¿½ï¿½ï¿½Äï¿½
         vp.time = 0;
         vp.Play();
 
-        // ‰¹º‚àw’èˆÊ’u‚©‚çÄ¶
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½Äï¿½
         source.time = audioStartFrame;
         source.Play();
     }
@@ -52,18 +72,77 @@ public class OP : MonoBehaviour
         vp.Play();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(!trigger && vp.isPlaying && vp.time >= enableBaseTime)
-        {
-            EnableYoukoso();
-            trigger = true;
-        }
-    }
-   void EnableYoukoso()
+    void EnableYoukoso()
     {
         baseObj.SetActive(true);
         source.DOFade(0.3f, 10f);
+    }
+    public void ClickPuma()
+    {
+        SceneManager.LoadScene("10.1");
+    }
+    public void ClickPanther()
+    {
+        SceneManager.LoadScene("10.3Pre");
+    }
+    public void ClickTiger()
+    {
+        SceneManager.LoadScene("10.4Pre");
+    }
+    public void ClickLeopard()
+    {
+        SceneManager.LoadScene("10.5Pre");
+    }
+    public void ClickQuit()
+    {
+        Application.Quit();
+    }
+    public void ClickReboot()
+    {
+        SceneManager.LoadScene("Home");
+    }
+    public void ClickRanking()
+    {
+        SceneManager.LoadScene("Ranking");
+    }
+
+    public void HowtoUp()
+    {
+        if (!isReadingHowto)
+            return;
+
+        // ä¸ŠãŒãªã„å ´åˆã¯ä½•ã‚‚ã—ãªã„
+        if (howtoSpriteIndex >= howtoSprites.Length - 1)
+            return;
+
+        howtoSpriteIndex++;
+
+        howtoImage.sprite = howtoSprites[howtoSpriteIndex];
+    }
+
+    public void HowtoDown()
+    {
+        if (!isReadingHowto)
+            return;
+
+        // ä¸‹ãŒãªã„å ´åˆã¯ä½•ã‚‚ã—ãªã„
+        if (howtoSpriteIndex <= 0)
+            return;
+
+        howtoSpriteIndex--;
+
+        howtoImage.sprite = howtoSprites[howtoSpriteIndex];
+    }
+    public void EnableHowto()
+    {
+        isReadingHowto = true;
+        howtoSpriteIndex = 0;
+        howtoImage.sprite = howtoSprites[howtoSpriteIndex];
+        howtoImage.gameObject.SetActive(true);
+    }
+    public void DisableHowto()
+    {
+        isReadingHowto = false;
+        howtoImage.gameObject.SetActive(false);
     }
 }
