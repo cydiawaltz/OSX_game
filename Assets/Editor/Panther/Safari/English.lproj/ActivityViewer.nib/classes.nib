@@ -1,0 +1,16 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {showActivity = id; }; 
+            CLASS = ActivityViewer; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {activityPanel = NSPanel; outlineView = NSOutlineView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = OutlineViewPlus; LANGUAGE = ObjC; SUPERCLASS = NSOutlineView; }, 
+        {CLASS = TableHeaderView; LANGUAGE = ObjC; SUPERCLASS = NSTableHeaderView; }
+    ); 
+    IBVersion = 1; 
+}

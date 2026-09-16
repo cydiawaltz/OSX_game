@@ -4655,6 +4655,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 94baa97b972a14debbad20e3cde87a85, type: 3}
   - {fileID: 8300000, guid: 4c772360325de45cbaf97b56d44aff39, type: 3}
   - {fileID: 8300000, guid: e5b8ba485dd9e426ba54e7dbe24f342b, type: 3}
+  - {fileID: 8300000, guid: 07b9130116bb7479c866e99c76e67c3c, type: 3}
   - {fileID: 8300000, guid: f5588efaada234bbd96c1b11f350a23a, type: 3}
   - {fileID: 8300000, guid: 3efa0738b7f404cecad403ccaabd47e6, type: 3}
   - {fileID: 8300000, guid: 0dfc55ee9b5ac42118ad6d948e984a33, type: 3}
@@ -11873,6 +11874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685b4425519e7524dbb873bbe966ce97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateStore: {fileID: 0}
   JumpPower: 10
   gravity: 22
   speed: 6
@@ -18383,6 +18385,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 951fdffb76e7243e8b30d0316569ee30, type: 3}
   - {fileID: 2800000, guid: b11dcae9785884cbd82bd9e1771f39b4, type: 3}
   - {fileID: 2800000, guid: 3b6bc6baa90fd4b7ea913fba19ffe7c0, type: 3}
+  - {fileID: 2800000, guid: 75739528ccd664ac493b953b5b634e62, type: 3}
   - {fileID: 2800000, guid: 57e0f7a5095844bf7991c0ab20f19127, type: 3}
   - {fileID: 2800000, guid: 74b4e3913a0db431299a199122578147, type: 3}
   target: {fileID: 1038062115}

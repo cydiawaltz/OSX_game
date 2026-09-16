@@ -1,0 +1,105 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                chooseMonospacedFont = id; 
+                chooseStandardFont = id; 
+                takeDefaultCharacterSetFrom = id; 
+                toggleDisplayImages = id; 
+                toggleUnderlineLinks = id; 
+            }; 
+            CLASS = AppearancePreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                defaultCharacterSetMenu = NSPopUpButton; 
+                displayImagesCheckbox = NSButton; 
+                monospacedFontSample = NSTextField; 
+                standardFontSample = NSTextField; 
+                styleSheetPopUp = NSPopUpButton; 
+                underlineLinksCheckbox = NSButton; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {
+            ACTIONS = {
+                editMyCard = id; 
+                editOtherFormData = id; 
+                editPasswords = id; 
+                toggleAutoFillAddressFields = id; 
+                toggleAutoFillOtherForms = id; 
+                toggleAutoFillPasswords = id; 
+            }; 
+            CLASS = AutoFillPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                autoFillAddressFieldsCheckBox = NSButton; 
+                autoFillOtherFormsCheckBox = NSButton; 
+                autoFillPasswordsCheckBox = NSButton; 
+                editMyCardButton = NSButton; 
+                editOtherFormDataButton = NSButton; 
+                editPasswordsButton = NSButton; 
+                miscFormsDataEditor = MiscFormsDataEditor; 
+                passwordsEditor = PasswordsEditor; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = LocationPreferences; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {
+            CLASS = MiscFormsDataEditor; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = SheetWithTableController; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            CLASS = NSPreferencesModule; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {preferencesView = NSBox; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = PasswordsEditor; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = SheetWithTableController; 
+        }, 
+        {
+            ACTIONS = {hideSheet = id; removeAllItems = id; removeSelectedItems = id; }; 
+            CLASS = SheetWithTableController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                removeAllButton = NSButton; 
+                removeButton = NSButton; 
+                tableView = NSTableView; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = TableViewPlus; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            ACTIONS = {
+                chooseMonospacedFont = id; 
+                chooseSansSerifFont = id; 
+                chooseSerifFont = id; 
+                takeDefaultCharacterSetFrom = id; 
+                togglePreferredFontsOnly = id; 
+            }; 
+            CLASS = TextPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                chooseMonospacedFontButton = NSButton; 
+                chooseSansSerifFontButton = NSButton; 
+                chooseSerifFontButton = NSButton; 
+                defaultCharacterSetMenu = NSPopUpButton; 
+                monospacedFontSample = NSTextField; 
+                preferredFontsOnlyCheckbox = NSButton; 
+                sansSerifFontSample = NSTextField; 
+                serifFontSample = NSTextField; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,29 @@
+// Factory defaults.
+
+// created empty, but some stuff from the framework will migrate here soon
+
+{
+    StatusControllerAffectsAllServices = 0;
+    AutoCreateCustomMessages = 1;
+    "NSWindow Frame BuddyList.Uncollapsed" = "370 323 180 325 0 0 1024 746"; 
+    "NSWindow Frame SubNetViewer.Uncollapsed" = "120 323 180 325 0 0 1024 746";
+    "BuddyList.ShowStatus" = 1;
+    "SubNetViewer.ShowStatus" = 1;
+    "BuddyList.SortOrder" = 3;
+    "BuddyList.SecondarySortOrder" = 2;
+    "SubNetViewer.SortOrder" = 3;
+    "SubNetViewer.SecondarySortOrder" = 2;
+    AutoLogin = 1;
+    OfflineOnQuit = 1;
+    KnockKnock = 1;
+    
+    /* Changing the size of the Recent Pictures pop-up:
+        To widen the pop-up for localization purposes (to make more room for menu commands)
+        increase RecentPicturesColumns. You will probably want to reduce RecentPicturesRows.
+        You may also want to redefine MaxRecentPictures; the rule to follow is:
+            RecentPicturesColums * RecentPicturesMinRows = MaxRecentPictures + 2
+        It's OK if rows x columns is a little bit larger, there will just be a few blanks spots. */
+    RecentPicturesColumns = 4;
+    RecentPicturesMinRows = 4;
+//  MaxRecentPictures = 14;
+}

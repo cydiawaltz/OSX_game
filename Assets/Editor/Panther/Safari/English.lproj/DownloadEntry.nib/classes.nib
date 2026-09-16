@@ -1,0 +1,21 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {stop = id; }; 
+            CLASS = DownloadRow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_box" = FlippedBox; 
+                "_button" = NSButton; 
+                "_filename" = NSTextField; 
+                "_icon" = NSImageView; 
+                "_progressIndicator" = NSProgressIndicator; 
+                "_status" = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = FlippedBox; LANGUAGE = ObjC; SUPERCLASS = NSBox; }
+    ); 
+    IBVersion = 1; 
+}

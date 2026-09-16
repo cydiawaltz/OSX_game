@@ -1,0 +1,35 @@
+{
+    IBClasses = (
+        {CLASS = BarBackground; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = ColoredRect; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            CLASS = DownloadViewController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_listView" = ListView; }; 
+            SUPERCLASS = NSResponder; 
+        }, 
+        {
+            ACTIONS = {clear = id; }; 
+            CLASS = DownloadWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_barBackground" = BarBackground; 
+                "_clearButton" = NSButton; 
+                "_scrollView" = WebDynamicScrollBarsView; 
+                "_total" = EtchedStringView; 
+                "_viewController" = DownloadViewController; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = EtchedStringView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = ListView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = PlasticButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {
+            CLASS = WebDynamicScrollBarsView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSScrollView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

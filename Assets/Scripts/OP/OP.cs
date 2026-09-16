@@ -9,6 +9,7 @@ public class OP : MonoBehaviour
 {
     [SerializeField] VideoPlayer vp;
     [SerializeField] AudioSource source;
+    [SerializeField] StateStore stateStore;
     [SerializeField] float audioStartFrame;
     [SerializeField] float videoLoopTime;
     [SerializeField] float enableBaseTime;
@@ -22,8 +23,24 @@ public class OP : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(StartSet());
-
+        GameObject[] Objects = GameObject.FindGameObjectsWithTag("State");
+        if(Objects.Length > 1)//既にある時
+        {
+            //Destroy(Objects[0]);
+            stateStore = Objects[1].GetComponent<StateStore>();
+            Destroy(source.gameObject);
+            source = GameObject.FindWithTag("Source").GetComponent<AudioSource>();
+            source.Play();
+            vp.time = enableBaseTime;
+            vp.Play();
+        }
+        else
+        {
+            stateStore = GameObject.FindWithTag("State").GetComponent<StateStore>();
+            StartCoroutine(StartSet());
+            DontDestroyOnLoad(source.gameObject);
+        }
+        
     }
     void Update()
     {
@@ -75,23 +92,27 @@ public class OP : MonoBehaviour
     void EnableYoukoso()
     {
         baseObj.SetActive(true);
-        source.DOFade(0.3f, 10f);
+        source.DOFade(0.9f, 10f);
     }
     public void ClickPuma()
     {
-        SceneManager.LoadScene("10.1");
+        stateStore.stage = "10.1";
+        SceneManager.LoadScene("Pre");
     }
     public void ClickPanther()
     {
-        SceneManager.LoadScene("10.3Pre");
+        stateStore.stage = "10.3";
+        SceneManager.LoadScene("Pre");
     }
     public void ClickTiger()
     {
-        SceneManager.LoadScene("10.4Pre");
+        stateStore.stage = "10.4";
+        SceneManager.LoadScene("Pre");
     }
     public void ClickLeopard()
     {
-        SceneManager.LoadScene("10.5Pre");
+        stateStore.stage = "10.5";
+        SceneManager.LoadScene("Pre");
     }
     public void ClickQuit()
     {
@@ -99,6 +120,8 @@ public class OP : MonoBehaviour
     }
     public void ClickReboot()
     {
+        Destroy(GameObject.FindWithTag("Source"));
+        Destroy(GameObject.FindWithTag("State"));
         SceneManager.LoadScene("Home");
     }
     public void ClickRanking()

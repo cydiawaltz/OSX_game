@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Classes</key>
+	<dict>
+		<key>BrowserDocument</key>
+		<dict>
+			<key>Attributes</key>
+			<dict>
+				<key>URLString</key>
+				<dict>
+					<key>Description</key>
+					<string>The current URL of the document</string>
+					<key>Name</key>
+					<string>URL</string>
+				</dict>
+				<key>source</key>
+				<dict>
+					<key>Description</key>
+					<string>The HTML source of the document.</string>
+					<key>Name</key>
+					<string>source</string>
+				</dict>
+				<key>text</key>
+				<dict>
+					<key>Description</key>
+					<string>Text of the document. A copy. Modifications to text aren't reflected on the web page.</string>
+					<key>Name</key>
+					<string>text</string>
+				</dict>
+			</dict>
+			<key>Description</key>
+			<string>A Safari document.</string>
+			<key>Name</key>
+			<string>document</string>
+			<key>PluralName</key>
+			<string>documents</string>
+		</dict>
+	</dict>
+	<key>Commands</key>
+	<dict>
+		<key>DoJavaScript</key>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>DocumentName</key>
+				<dict>
+					<key>Description</key>
+					<string>The document that the JavaScript should be applied in.</string>
+					<key>Name</key>
+					<string>in</string>
+				</dict>
+			</dict>
+			<key>Description</key>
+			<string>Applies a string of JavaScript code to a document.</string>
+			<key>Name</key>
+			<string>do JavaScript</string>
+		</dict>
+	</dict>
+	<key>Description</key>
+	<string>Safari specific classes</string>
+	<key>Name</key>
+	<string>Safari suite</string>
+</dict>
+</plist>

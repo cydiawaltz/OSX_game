@@ -1,0 +1,14 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = HTMLSourceController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {scrollView = NSScrollView; textView = WebSearchableTextView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = WebSearchableTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {CLASS = Window; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }
+    ); 
+    IBVersion = 1; 
+}

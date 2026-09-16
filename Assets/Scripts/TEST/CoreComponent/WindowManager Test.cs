@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using System;
 using DG.Tweening;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class WindowManager : MonoBehaviour
 {
@@ -44,6 +46,7 @@ public class WindowManager : MonoBehaviour
     public DecalProjector playerShadow;
     //debug
     public int frameCount;
+    BGMController bgm;
     /*
     >>10.1
     0:Finder 1:iTunes 2:IE 3:Preview 4:Sherlock 5:システム環境設定 6:Stickies 7:TextEdit 8:Classic startup 9:OS9(SimpleText)
@@ -432,16 +435,20 @@ public class WindowManager : MonoBehaviour
             back.SetActive(false);
             Debug.Log("Back disable");
         }
-
-        yield return new WaitForSeconds(1.0f);
+        bgm = this.gameObject.GetComponent<BGMController>();
+        bgm.source.DOFade(0.0f, 1.0f).OnComplete(() => bgm.source.Stop());
+        yield return new WaitForSeconds(1.5f);
         Debug.Log("NameEntry");
         if (isWin)
         {
             // ネームエントリーへ
+            SceneManager.LoadScene("NameEntry");
         }
         else
         {
             // タイトルへ
+            Destroy(GameObject.FindWithTag("State"));
+            SceneManager.LoadScene("Home");
         }
     }
     IEnumerator StartGame()

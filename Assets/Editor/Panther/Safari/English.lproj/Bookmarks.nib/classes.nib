@@ -1,0 +1,217 @@
+{
+    IBClasses = (
+        {
+            CLASS = AddressBarController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addBookmarkButton = NSView; 
+                autoFillButton = NSView; 
+                backForwardButtonsBox = NSView; 
+                barBackground = NSView; 
+                homeButton = NSView; 
+                inputFieldsView = NSSplitView; 
+                reportBugButton = NSView; 
+                stopAndReloadButton = NSView; 
+                textSizeButtonsBox = NSView; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = BackForwardButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {CLASS = BarBackground; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            ACTIONS = {
+                addContentsFolder = id; 
+                addSourceFolder = id; 
+                editSelectedBookmarkAddress = id; 
+                editSelectedBookmarkTitle = id; 
+            }; 
+            CLASS = BookmarksViewController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                bookmarkSourcesTableView = TableViewPlus; 
+                newContentsFolderButton = NSButton; 
+                newFolderContentsButton = NSButton; 
+                newFolderSourceButton = NSButton; 
+                outlineView = OutlineViewPlus; 
+                tableAndOutlineSplitView = NSSplitView; 
+                topHighlightLine = ColoredRect; 
+            }; 
+            SUPERCLASS = NSResponder; 
+        }, 
+        {
+            ACTIONS = {
+                goBack = id; 
+                goForward = id; 
+                performQuickSearch = id; 
+                selectLocationField = id; 
+                selectSearchField = id; 
+                showSearchSheet = id; 
+                stop = id; 
+                toggleFavoritesBar = id; 
+                toggleStatusBar = id; 
+                toggleStopAndGo = id; 
+            }; 
+            CLASS = BrowserDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                browserSearchResultsTableView = NSTableView; 
+                browserView = NSTextView; 
+                favoritesBar = NSBox; 
+                statusBar = NSBox; 
+                statusField = NSTextField; 
+                tabView = NSTabView; 
+                templateBackButton = NSButton; 
+                templateForwardButton = NSButton; 
+                templateLocationField = NSTextField; 
+                templateSearchControls = id; 
+                templateStopAndGoButton = NSButton; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {
+                setPageForSnapBackToCurrentPage = id; 
+                snapBackToPage = id; 
+                snapBackToSearchResults = id; 
+            }; 
+            CLASS = BrowserWebView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                bookmarksViewContents = NSView; 
+                bookmarksViewController = BookmarksViewController; 
+            }; 
+            SUPERCLASS = WebView; 
+        }, 
+        {CLASS = BrowserWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 
+        {
+            ACTIONS = {
+                addBookmark = id; 
+                autoFill = id; 
+                changeTextEncoding = id; 
+                closeCurrentTab = id; 
+                goBack = id; 
+                goForward = id; 
+                goHome = id; 
+                goToToolbarLocation = id; 
+                makeTextLarger = id; 
+                makeTextSmaller = id; 
+                newBookmarkFolder = id; 
+                newTab = id; 
+                performQuickSearch = id; 
+                reportBugToApple = id; 
+                selectLocationField = id; 
+                selectNextTab = id; 
+                selectPreviousTab = id; 
+                selectSearchField = id; 
+                stopOrReload = id; 
+                toggleFavoritesBar = id; 
+                toggleLocationBar = id; 
+                toggleShowAddBookmarkButton = id; 
+                toggleShowAutoFillButton = id; 
+                toggleShowBackForwardButtons = id; 
+                toggleShowBookmarks = id; 
+                toggleShowGoogleSearch = id; 
+                toggleShowHomeButton = id; 
+                toggleShowStopAndReloadButton = id; 
+                toggleShowTextSizingButtons = id; 
+                toggleStatusBar = id; 
+            }; 
+            CLASS = BrowserWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addBookmarkButton = NSButton; 
+                autoFillButton = NSButton; 
+                backButton = ButtonWithMenu; 
+                favoritesBarView = FavoritesBarView; 
+                fontBiggerButton = NSButton; 
+                fontSmallerButton = NSButton; 
+                forwardButton = ButtonWithMenu; 
+                homeButton = NSButton; 
+                locationBar = BarBackground; 
+                locationField = LocationTextField; 
+                searchField = SearchTextField; 
+                statusBar = BarBackground; 
+                statusStringView = EtchedStringView; 
+                stopAndReloadButton = NSButton; 
+                tabBarView = TabBarView; 
+                tabSwitcher = NSTabView; 
+                toggleBookmarksButton = RolloverImageButton; 
+            }; 
+            SUPERCLASS = WindowController; 
+        }, 
+        {CLASS = ButtonWithMenu; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {CLASS = ColoredRect; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = EtchedStringView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = FavoriteButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {CLASS = FavoritesBar; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = FavoritesBarView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            ACTIONS = {
+                addBookmark = id; 
+                goBack = id; 
+                goForward = id; 
+                makeTextLarger = id; 
+                makeTextSmaller = id; 
+                performQuickSearch = id; 
+                reportBugToApple = id; 
+                toggleShowBookmarks = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = LocationTextField; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = TextFieldWithControls; 
+        }, 
+        {
+            ACTIONS = {clearSearch = id; showSearchTypeMenu = id; }; 
+            CLASS = NSObject; 
+            LANGUAGE = ObjC; 
+        }, 
+        {CLASS = OutlineViewPlus; LANGUAGE = ObjC; SUPERCLASS = NSOutlineView; }, 
+        {
+            CLASS = RolloverImageButton; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = RolloverTrackingButton; 
+        }, 
+        {CLASS = RolloverTrackingButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {
+            CLASS = RolloverTrackingToggleButton; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = RolloverTrackingButton; 
+        }, 
+        {
+            CLASS = SearchTextField; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = TextFieldWithControls; 
+        }, 
+        {
+            ACTIONS = {go = id; stop = id; }; 
+            CLASS = StopAndGoButton; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSButton; 
+        }, 
+        {
+            CLASS = TabBarView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {delegate = id; tabView = NSTabView; }; 
+            SUPERCLASS = BarBackground; 
+        }, 
+        {CLASS = TabViewItemWithButton; LANGUAGE = ObjC; SUPERCLASS = NSTabViewItem; }, 
+        {CLASS = TableViewPlus; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = TextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
+        {CLASS = TextFieldWithControls; LANGUAGE = ObjC; SUPERCLASS = TextField; }, 
+        {CLASS = VerticalSeparator; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = WebCoreScrollView; LANGUAGE = ObjC; SUPERCLASS = NSScrollView; }, 
+        {
+            CLASS = WebDynamicScrollBarsView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = WebCoreScrollView; 
+        }, 
+        {CLASS = WebView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = WindowController; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }
+    ); 
+    IBVersion = 1; 
+}

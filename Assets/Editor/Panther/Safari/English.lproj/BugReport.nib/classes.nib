@@ -1,0 +1,22 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {cancel = id; submitBug = id; toggleWindowSize = id; }; 
+            CLASS = BugReportController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                URLField = NSTextField; 
+                bugTypePopUp = NSPopUpButton; 
+                descriptionTextView = NSTextView; 
+                disclosureButton = NSButton; 
+                extras = NSTabView; 
+                screenShotCheckBox = NSButton; 
+                sourceCheckBox = NSButton; 
+                submitButton = NSButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

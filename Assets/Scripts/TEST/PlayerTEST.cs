@@ -51,17 +51,19 @@ public class Player : MonoBehaviour
         {
             notUseStateStore = true;
         }
+        if(!notUseStateStore)
+        {
+            //stateStore.MaxHP = maxHP;
+            maxHP = stateStore.MaxHP;
+            stateStore.StartGame();
+        }
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         controller = GetComponent<CharacterController>();
         originalPos = cameraTransform.position - transform.position;
-        maxHP = HP;
+        HP = maxHP;
         manager.changeVisualState += Switch;
         Syouin.enabled = false; SekaizanText.enabled = false; Eisyou.enabled = false;
-        if(!notUseStateStore)
-        {
-            stateStore.MaxHP = maxHP;
-            stateStore.StartGame();
-        }
+        
     }
 
     void Update()

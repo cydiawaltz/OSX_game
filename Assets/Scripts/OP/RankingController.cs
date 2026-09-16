@@ -12,6 +12,10 @@ public class RankingController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if(GameObject.FindWithTag("Source")!=null)
+        {
+            GameObject.FindWithTag("Source").GetComponent<AudioSource>().Stop();
+        }
         for(int i=0;i<6;i++)
         {
             data[i] = FunctionSet.GetRanking(i);

@@ -12,6 +12,7 @@ TagManager:
   - Mizushi
   - door
   - State
+  - Source
   layers:
   - Default
   - TransparentFX

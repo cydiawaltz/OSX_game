@@ -1,0 +1,75 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                chooseMonospacedFont = id; 
+                chooseStandardFont = id; 
+                takeDefaultCharacterSetFrom = id; 
+                toggleDisplayImages = id; 
+                toggleUnderlineLinks = id; 
+            }; 
+            CLASS = AppearancePreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                defaultCharacterSetMenu = NSPopUpButton; 
+                displayImagesCheckbox = NSButton; 
+                monospacedFontSample = NSTextField; 
+                standardFontSample = NSTextField; 
+                styleSheetPopUp = NSPopUpButton; 
+                underlineLinksCheckbox = NSButton; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = LocationPreferences; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {
+            CLASS = NSPreferencesModule; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {preferencesView = NSBox; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                toggleAlwaysShowTabBar = id; 
+                toggleEnableTabs = id; 
+                toggleSelectNewTabs = id; 
+            }; 
+            CLASS = TabsPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                alwaysShowBarCheckbox = NSButton; 
+                enableTabsCheckbox = NSButton; 
+                finePrintSwitcher = NSTabView; 
+                selectNewTabsCheckbox = NSButton; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {
+            ACTIONS = {
+                chooseMonospacedFont = id; 
+                chooseSansSerifFont = id; 
+                chooseSerifFont = id; 
+                takeDefaultCharacterSetFrom = id; 
+                togglePreferredFontsOnly = id; 
+            }; 
+            CLASS = TextPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                chooseMonospacedFontButton = NSButton; 
+                chooseSansSerifFontButton = NSButton; 
+                chooseSerifFontButton = NSButton; 
+                defaultCharacterSetMenu = NSPopUpButton; 
+                monospacedFontSample = NSTextField; 
+                preferredFontsOnlyCheckbox = NSButton; 
+                sansSerifFontSample = NSTextField; 
+                serifFontSample = NSTextField; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }
+    ); 
+    IBVersion = 1; 
+}

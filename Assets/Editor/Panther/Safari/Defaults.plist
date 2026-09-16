@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AddressBarIncludesAddBookmark</key>
+	<true/>
+	<key>AddressBarIncludesAutoFill</key>
+	<false/>
+	<key>AddressBarIncludesBackForward</key>
+	<true/>
+	<key>AddressBarIncludesGoogle</key>
+	<true/>
+	<key>AddressBarIncludesHome</key>
+	<false/>
+	<key>AddressBarIncludesStopAndReload</key>
+	<true/>
+	<key>AddressBarIncludesTextSizing</key>
+	<false/>
+	<key>AddressBarIncludesReportBug</key>
+	<false/>
+	<key>AskBeforeSubmittingInsecureForms</key>
+	<true/>
+	<key>AutoFillFromAddressBook</key>
+	<true/>
+	<key>AutoFillMiscellaneousForms</key>
+	<true/>
+	<key>AutoFillPasswords</key>
+	<false/>
+	<key>AutoOpenSafeDownloads</key>
+	<true/>
+	<key>BackForwardListSizeLimit</key>
+	<integer>200</integer>
+	<key>BackForwardMenuSizeLimit</key>
+	<integer>30</integer>
+	<key>BookmarksCollectionsIncludeAddressBook</key>
+	<true/>
+	<key>BookmarksCollectionsIncludeRendezvous</key>
+	<true/>
+	<key>BookmarksMenuIncludesAddressBook</key>
+	<false/>
+	<key>BookmarksMenuIncludesBookmarksToolbar</key>
+	<true/>
+	<key>BookmarksMenuIncludesRendezvous</key>
+	<false/>
+	<key>BookmarksToolbarIncludesAddressBook</key>
+	<false/>
+	<key>BookmarksToolbarIncludesRendezvous</key>
+	<false/>
+	<key>InputFieldWidthRatio</key>
+	<string>2.5</string>
+	<key>NSAllowSimpleArrowItemExpandDefault</key>
+	<true/>
+	<key>RecentHistoryMenuItemsLimit</key>
+	<integer>10</integer>
+	<key>ShowFavoritesBar</key>
+	<true/>
+	<key>ShowLocationBar</key>
+	<true/>
+	<key>ShowStatusBar</key>
+	<false/>
+	<key>URLMenuItemTitleMaxWidth</key>
+	<integer>400</integer>
+</dict>
+</plist>

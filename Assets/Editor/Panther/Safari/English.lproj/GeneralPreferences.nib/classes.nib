@@ -1,0 +1,56 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                setHomePageToCurrentPage = id; 
+                takeDefaultBrowserFrom = id; 
+                takeDownloadsClearingPolicyFrom = id; 
+                takeExternalLinkPolicyFrom = id; 
+                takeHomePageFrom = id; 
+                takeNewWindowBehaviorFrom = id; 
+                toggleAutoOpenDownloads = id; 
+            }; 
+            CLASS = GeneralPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                autoOpenDownloadsCheckbox = NSButton; 
+                defaultBrowserPopUp = NSPopUpButton; 
+                downloadLocationPopUp = NSPopUpButton; 
+                downloadsClearingPolicyPopUp = NSPopUpButton; 
+                externalLinkPolicyMatrix = NSMatrix; 
+                homePageField = NSTextField; 
+                newWindowBehaviorPopUp = NSPopUpButton; 
+                useCurrentPageButton = NSButton; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {
+            ACTIONS = {
+                chooseDownloadFolderFromFileBrowser = id; 
+                setStartPageToCurrentPage = id; 
+                setStartPageToNone = id; 
+                takeDownloadChoiceFrom = id; 
+                takeDownloadFolderFrom = id; 
+                takeStartPageFrom = id; 
+            }; 
+            CLASS = LocationPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                chooseDownloadFolderButton = NSButton; 
+                downloadChoicesMatrix = NSMatrix; 
+                downloadFolderField = NSTextField; 
+                startPageField = NSTextField; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {
+            CLASS = NSPreferencesModule; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {preferencesView = NSBox; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = TextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }
+    ); 
+    IBVersion = 1; 
+}

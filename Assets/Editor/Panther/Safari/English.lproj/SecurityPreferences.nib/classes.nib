@@ -1,0 +1,59 @@
+{
+    IBClasses = (
+        {
+            CLASS = AcceptedCookies; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = SheetWithTableController; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = LocationPreferences; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            CLASS = NSPreferencesModule; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {preferencesView = NSBox; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                showCookies = id; 
+                takeCookiePolicyFrom = id; 
+                toggleAskBeforeSubmittingInsecureForms = id; 
+                toggleJavaEnabled = id; 
+                toggleJavaScriptCanOpenWindows = id; 
+                toggleJavaScriptEnabled = id; 
+                togglePluginsEnabled = id; 
+            }; 
+            CLASS = SecurityPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                askBeforeSubmittingInsecureFormsCheckbox = NSButton; 
+                blockPopUpsCheckbox = NSButton; 
+                cookiePolicyMatrix = NSMatrix; 
+                cookiesEditor = AcceptedCookies; 
+                javaEnabledCheckbox = NSButton; 
+                javaScriptEnabledCheckbox = NSButton; 
+                pluginsEnabledCheckbox = NSButton; 
+                showCookiesButton = NSButton; 
+            }; 
+            SUPERCLASS = NSPreferencesModule; 
+        }, 
+        {
+            ACTIONS = {hideSheet = id; removeAllItems = id; removeSelectedItems = id; }; 
+            CLASS = SheetWithTableController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                removeAllButton = NSButton; 
+                removeButton = NSButton; 
+                tableView = TableViewPlus; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = TableViewPlus; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }
+    ); 
+    IBVersion = 1; 
+}

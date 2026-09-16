@@ -1,0 +1,183 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                closeAllWindows = id; 
+                confirmEmptyCache = id; 
+                confirmResetSafari = id; 
+                findNext = id; 
+                findPrevious = id; 
+                miniaturizeAll = id; 
+                showAcknowledgments = id; 
+                showActivity = id; 
+                showDownloads = id; 
+                showFindPanel = id; 
+                showLicense = id; 
+                showPlugins = id; 
+                showPreferences = id; 
+                showReleaseNotes = id; 
+                showShortcuts = id; 
+                toggleJavaScriptCanNotOpenWindows = id; 
+            }; 
+            CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                historyMenu = NSMenu; 
+                statusBarMenuItem = NSMenuItem; 
+                textEncodingMenuItem = NSMenuItem; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = BookmarksController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                appController = AppController; 
+                bookmarksMenu = NSMenu; 
+                lastItemBeforeBookmarks = NSMenuItem; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {goBack = id; goForward = id; performSearch = id; }; 
+            CLASS = BrowserDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                browserSearchResultsTableView = id; 
+                browserView = id; 
+                searchView = id; 
+                tabView = id; 
+                templateBackButton = id; 
+                templateForwardButton = id; 
+                templateLocationField = id; 
+                templateSearchControls = id; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
+            CLASS = BrowserDocumentController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSDocumentController; 
+        }, 
+        {
+            ACTIONS = {
+                changeTextEncoding = id; 
+                goToToolbarLocation = id; 
+                newBookmarksFolder = id; 
+                performQuickSearch = id; 
+                selectLocationField = id; 
+                selectSearchField = id; 
+                stopOrReload = id; 
+                toggleFavoritesBar = id; 
+                toggleLocationBar = id; 
+                toggleShowAddBookmarkButton = id; 
+                toggleShowBackForwardButtons = id; 
+                toggleShowBookmarks = id; 
+                toggleShowStopAndReloadButton = id; 
+                toggleShowTextSizingButtons = id; 
+                toggleStatusBar = id; 
+            }; 
+            CLASS = BrowserWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addBookmarkButton = NSButton; 
+                backButton = ButtonWithMenu; 
+                bookmarksViewController = BookmarksViewController; 
+                favoritesBarView = FavoritesBarView; 
+                fontBiggerButton = NSButton; 
+                fontSmallerButton = NSButton; 
+                forwardButton = ButtonWithMenu; 
+                locationBar = BarBackground; 
+                locationField = LocationTextField; 
+                modeSwitcher = NSTabView; 
+                searchField = SearchTextField; 
+                statusBar = BarBackground; 
+                statusStringView = EtchedStringView; 
+                stopAndReloadButton = NSButton; 
+                toggleBookmarksButton = NSButton; 
+                webView = WebView; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {
+                addBookmark = id; 
+                addBookmarkToMenu = id; 
+                autoFill = id; 
+                changeTextEncoding = id; 
+                closeAllWindows = id; 
+                closeCurrentTab = id; 
+                closeInactiveTabs = id; 
+                findNext = id; 
+                findPrevious = id; 
+                goBack = id; 
+                goForward = id; 
+                goHome = id; 
+                goToSelectedBookmark = id; 
+                jumpToSelection = id; 
+                makeTextLarger = id; 
+                makeTextSmaller = id; 
+                miniaturizeAll = id; 
+                myAction = id; 
+                newBookmark = id; 
+                newBookmarkFolder = id; 
+                newBookmarkSeparator = id; 
+                newTab = id; 
+                openLocation = id; 
+                performSearch = id; 
+                reload = id; 
+                reloadObeyingLocationField = id; 
+                reportBugToApple = id; 
+                searchWeb = id; 
+                selectLocationField = id; 
+                selectNextTab = id; 
+                selectPreviousTab = id; 
+                selectSearchField = id; 
+                setPageForSnapBackToCurrentPage = id; 
+                showDOMTree = id; 
+                showFindPanel = id; 
+                showHistory = id; 
+                snapBackToPage = id; 
+                snapBackToSearchResults = id; 
+                stopLoading = id; 
+                takeFindStringFromSelection = id; 
+                toggleEditSelectedBookmark = id; 
+                toggleFavoritesBar = id; 
+                toggleLocationBar = id; 
+                toggleShowAddBookmarkButton = id; 
+                toggleShowAutoFillButton = id; 
+                toggleShowBackForwardButtons = id; 
+                toggleShowBookmarks = id; 
+                toggleShowGoogleSearch = id; 
+                toggleShowHomeButton = id; 
+                toggleShowReportBugButton = id; 
+                toggleShowStopAndReloadButton = id; 
+                toggleShowTextSizingButtons = id; 
+                toggleStatusBar = id; 
+                viewJavaScriptLog = id; 
+                viewReconstructedSource = id; 
+                viewRenderTree = id; 
+                viewSource = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {delete = id; goToSelectedItem = id; showWindow = id; }; 
+            CLASS = GlobalHistory; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_historyMenu" = NSMenu; 
+                addToBookmarksButton = NSButton; 
+                appController = AppController; 
+                goToButton = NSButton; 
+                historyView = OutlineViewPlus; 
+                removeButton = NSButton; 
+                window = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
