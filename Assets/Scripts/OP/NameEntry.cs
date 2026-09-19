@@ -32,6 +32,7 @@ public class NameEntry : MonoBehaviour
                 source.clip = clips[0];
                 break;
         }
+        source.Play();
     }
 
     // Update is called once per frame

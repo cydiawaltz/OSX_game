@@ -77,11 +77,15 @@ public class FinderIcons : MonoBehaviour
         if(isPanther)
         {
             //隠してたiconの上のオブジェクトを有効にし、フェード
+            var initialScale = iconObj.gameObject.transform.localScale;
             iconObj.material.color = new Color(1,1,1,initialAlpha);
             var sequence = DOTween.Sequence();
             var tmp = iconObj.gameObject.transform.localScale;
             sequence.Append(iconObj.material.DOColor(new Color(1,1,1,0),openDuration))
-                    .Join(iconObj.gameObject.transform.DOScale(new Vector3(tmp.x*ExpandScale,1,tmp.z*ExpandScale),openDuration));
+                    .Join(iconObj.gameObject.transform.DOScale(new Vector3(tmp.x*ExpandScale,tmp.y*ExpandScale,1),openDuration));
+            sequence.OnComplete(() => {
+                iconObj.gameObject.transform.localScale = initialScale;
+            });
         }
     }
     void OpenPreview()

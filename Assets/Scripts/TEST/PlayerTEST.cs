@@ -46,19 +46,20 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        stateStore = GameObject.FindWithTag("State").GetComponent<StateStore>();
-        if (stateStore == null)
+        var State = GameObject.FindWithTag("State");   
+        if (State == null)
         {
             notUseStateStore = true;
         }
         if(!notUseStateStore)
         {
+            stateStore = State.GetComponent<StateStore>();
             //stateStore.MaxHP = maxHP;
             maxHP = stateStore.MaxHP;
             stateStore.StartGame();
         }
         manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
-        controller = GetComponent<CharacterController>();
+        controller = this.gameObject.GetComponent<CharacterController>();
         originalPos = cameraTransform.position - transform.position;
         HP = maxHP;
         manager.changeVisualState += Switch;

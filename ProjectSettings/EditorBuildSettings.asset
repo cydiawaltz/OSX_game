@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pre.unity
     guid: 15a8609f86b6444b89529cbfabcb0b5b
+  - enabled: 1
+    path: Assets/Scenes/10.3.unity
+    guid: 3ba09bec6d1f94f1c9a474146e2fa905
   - enabled: 0
     path: Assets/Scenes/10.3Pre.unity
     guid: 97876bc859c634d6ebe14c38842f8605

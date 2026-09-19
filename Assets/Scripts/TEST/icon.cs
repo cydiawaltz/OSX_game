@@ -102,26 +102,26 @@ public class Icon : MonoBehaviour//iconにアタッチ
         );*/
 
         targetMaterial.Add(this.GetComponent<Renderer>().material);
-        if(status != null) bounceOnly = false;
-        if(status != null)
+        if (status != null) bounceOnly = false;
+        if (status != null)
         {
             status.SetActive(false);
-            if(window.activeSelf)
+            if (window.activeSelf)
             {
-                status.SetActive(true); 
+                status.SetActive(true);
                 isLaunched = true;
-            } 
+            }
             else
             {
                 status.SetActive(false);
                 isLaunched = false;
             }
         }
-        if(window != null)
+        if (window != null)
         {
             targetWindow = window.GetComponent<Window>();
         }
-        Manager.OnEndTransition+=redoSetRect;
+        Manager.OnEndTransition += redoSetRect;
     }
     void redoSetRect()
     {
@@ -177,7 +177,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
     }
     IEnumerator StartorBackToAppCoroutine()
     {
-        if(!allowStarting||isLaunched||isstarting)
+        if (!allowStarting || isLaunched || isstarting)
         {
             Manager.EnableWindowAsNewWindow(window);
             yield break;
@@ -196,12 +196,12 @@ public class Icon : MonoBehaviour//iconにアタッチ
     }
     IEnumerator ClickButtonDown(bool isactive)
     {
-        if (!allowStarting || !isactive)
+        if (!allowStarting || !isactive || isAnimation)
             yield break;
-        if(targetWindow ! == null)
+        if (targetWindow! == null)
         {
             //if(targetWindow.isTopMost) => なんか色々競合して直すのもだりぃのでmanagerの参照と比較
-            if(Manager.windows_statestore[0] == targetWindow)
+            if (Manager.windows_statestore[0] == targetWindow)
             {
                 yield break;
             }
@@ -216,7 +216,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
         // ゴミ箱などは起動しない
         if (isUnLaunchedIcon)
         {
-            if(isOpenHP)
+            if (isOpenHP)
             {
                 Application.OpenURL("https://wattzmaro.github.io/");
             }
@@ -250,13 +250,18 @@ public class Icon : MonoBehaviour//iconにアタッチ
     }
     IEnumerator DoBounce()
     {
+        if (isAnimation)
+            yield break;
+
         isAnimation = true;
+
+        Vector3 basePos = transform.position;
+
         if (isEndlessBound)
         {
-            while (true)
+            while (isEndlessBound)
             {
                 yield return StartCoroutine(Bounce());
-                if (!isEndlessBound) break;
             }
         }
         else
@@ -265,8 +270,11 @@ public class Icon : MonoBehaviour//iconにアタッチ
             {
                 yield return StartCoroutine(Bounce());
             }
-
         }
+
+        // 規定回数終了後は必ず初期位置へ戻す
+        transform.DOKill();
+        transform.position = basePos;
         isAnimation = false;
     }
     void OnStarted()
@@ -286,32 +294,40 @@ public class Icon : MonoBehaviour//iconにアタッチ
         transform.DOKill();
 
         Vector3 basePos = transform.position;
+        float maxZ = basePos.z + boundHeight;
 
         Sequence seq = DOTween.Sequence();
 
-        float currentHeight = boundHeight;
-
-        /*for(int i = 0; i < BoundTimes; i++)
-        {*/
-        // 上昇
         seq.Append(
             transform.DOMoveZ(
-                basePos.z + currentHeight,
+                maxZ,
                 upDuration
             ).SetEase(easeTypeMae)
         );
 
-        // 落下
         seq.Append(
             transform.DOMoveZ(
                 basePos.z,
                 downDuration
             ).SetEase(easeTypeAto)
         );
-        //}
 
-        yield return seq.WaitForCompletion();
+        while (seq.IsActive())
+        {
+            // 規定の高さを超えたら強制終了
+            if (transform.position.z > maxZ)
+            {
+                seq.Kill();
+                transform.position = basePos;
+                yield break;
+            }
+
+            yield return null;
+        }
+
         yield return new WaitForSeconds(WaitTimes);
+
+        // 最後に必ず元の座標へ戻す
         transform.position = basePos;
     }
     public void QuitApp()
