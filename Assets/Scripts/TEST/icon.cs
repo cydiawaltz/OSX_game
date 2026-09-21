@@ -45,11 +45,13 @@ public class Icon : MonoBehaviour//iconにアタッチ
     Window targetWindow;
     public bool isstarting = false;
     public bool isOpenHP;
+    Vector3 baseposition;
 
     void Start()
     {
         //StartCoroutine(DoBounce());
         //Window.csから移植
+        
         OverViewCamera = WindowManager.overCam;
         Manager = GameObject.FindWithTag("Manager").GetComponent<WindowManager>();
         originalWidth = this.transform.localScale.z;
@@ -126,6 +128,7 @@ public class Icon : MonoBehaviour//iconにアタッチ
     void redoSetRect()
     {
         rect = FunctionSet.GetRectAngle(this.gameObject, WindowManager.overCam);
+        baseposition = transform.position;
     }
     void Update()
     {
@@ -169,6 +172,10 @@ public class Icon : MonoBehaviour//iconにアタッチ
                 }
             }
         }
+         if (transform.position.z > baseposition.z + boundHeight+0.3f)
+            {
+                transform.position = baseposition;
+            }
 
     }
     public void StartorBackToApp()
