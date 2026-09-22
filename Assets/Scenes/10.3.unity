@@ -12145,7 +12145,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   player: {fileID: 1788434778}
   target: {fileID: 1146141640}
-  dist: 0.3
+  dist: 2
 --- !u!1 &1913545967
 GameObject:
   m_ObjectHideFlags: 0

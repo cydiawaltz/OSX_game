@@ -45,4 +45,8 @@ public class NameEntry : MonoBehaviour
         FunctionSet.AddRanking(namef.text, stateStore.stage, stateStore.score, comment.text);
         SceneManager.LoadScene("Home");
     }
+    public void Cancel()
+    {
+        SceneManager.LoadScene("Home");
+    }
 }
