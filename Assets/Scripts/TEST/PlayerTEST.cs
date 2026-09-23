@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
     private bool isRotating;
     public GameObject centerObject;
     bool notUseStateStore;
+    public Action onwin,onlose;
 
     void Start()
     {
@@ -265,6 +266,7 @@ public class Player : MonoBehaviour
     }
     IEnumerator OnDeath()
     {
+        onlose?.Invoke();
         Debug.Log("you died");
         maincam.transform.parent = null;
         manager.IsOverView = false;
@@ -285,6 +287,7 @@ public class Player : MonoBehaviour
     }
     public IEnumerator OnWin()
     {
+        onwin?.Invoke();
         if(!notUseStateStore)
         {
             stateStore.EndGame();
