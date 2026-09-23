@@ -43,16 +43,17 @@ public class Player : MonoBehaviour
     private bool isRotating;
     public GameObject centerObject;
     bool notUseStateStore;
-    public Action onwin,onlose;
+    public Action onwin, onlose;
+    public GameObject bullettarget;
 
     void Start()
     {
-        var State = GameObject.FindWithTag("State");   
+        var State = GameObject.FindWithTag("State");
         if (State == null)
         {
             notUseStateStore = true;
         }
-        if(!notUseStateStore)
+        if (!notUseStateStore)
         {
             stateStore = State.GetComponent<StateStore>();
             //stateStore.MaxHP = maxHP;
@@ -65,7 +66,7 @@ public class Player : MonoBehaviour
         HP = maxHP;
         manager.changeVisualState += Switch;
         Syouin.enabled = false; SekaizanText.enabled = false; Eisyou.enabled = false;
-        
+
     }
 
     void Update()
@@ -177,18 +178,27 @@ public class Player : MonoBehaviour
 
     public void InjectBulletDown()
     {
-        if(!notUseStateStore)
+        if (!notUseStateStore)
         {
             stateStore.bulletCount++;
         }
-        GameObject shell = Instantiate(bullet, gameObject.transform.position, Quaternion.identity);
+
+        Vector3 direction = bullettarget.transform.forward;
+
+        GameObject shell = Instantiate(
+            bullet,
+            bullettarget.transform.position,
+            Quaternion.LookRotation(direction)
+        );
+
         Rigidbody rb = shell.GetComponent<Rigidbody>();
-        rb.AddForce(transform.forward * bulletSpeed);
+        rb.linearVelocity = direction * bulletSpeed;
+
         Destroy(shell, 8.0f);
     }
     public void InjectBulletUp()
     {
-        if(!notUseStateStore)
+        if (!notUseStateStore)
         {
             stateStore.bulletCount++;
         }
@@ -288,7 +298,7 @@ public class Player : MonoBehaviour
     public IEnumerator OnWin()
     {
         onwin?.Invoke();
-        if(!notUseStateStore)
+        if (!notUseStateStore)
         {
             stateStore.EndGame();
         }

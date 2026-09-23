@@ -43,10 +43,12 @@ public class NameEntry : MonoBehaviour
     public void SaveRanking()
     {
         FunctionSet.AddRanking(namef.text, stateStore.stage, stateStore.score, comment.text);
-        SceneManager.LoadScene("Home");
+        //SceneManager.LoadScene("Home");
+        Application.Quit();
     }
     public void Cancel()
     {
-        SceneManager.LoadScene("Home");
+        //SceneManager.LoadScene("Home");
+        Application.Quit();
     }
 }

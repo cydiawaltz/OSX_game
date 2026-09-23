@@ -11646,6 +11646,7 @@ MonoBehaviour:
   - {fileID: 734907963}
   rotationSensitivity: 0.3
   centerObject: {fileID: 330585543}
+  bullettarget: {fileID: 1345157488}
 --- !u!143 &1788434779
 CharacterController:
   m_ObjectHideFlags: 0
