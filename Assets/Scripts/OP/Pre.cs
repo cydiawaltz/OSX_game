@@ -58,7 +58,15 @@ public class Pre : MonoBehaviour
     {
         Destroy(GameObject.FindWithTag("Source"));
         //stateStore.stage = SceneManager.GetActiveScene().name.Replace("Pre","");
-        SceneManager.LoadScene(stateStore.stage);
+        if(stateStore != null)
+        {
+            SceneManager.LoadScene(stateStore.stage);
+        }
+        else
+        {
+            SceneManager.LoadScene("10.1");
+        }
+        
     }
     public void ChangeTexture(int index)
     {

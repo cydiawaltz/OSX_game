@@ -11,6 +11,7 @@ public class StateStore : MonoBehaviour
     public string stage;
     bool isGame;
     public float difficulty;
+    float notSousaTime;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -31,6 +32,15 @@ public class StateStore : MonoBehaviour
         if(isGame)
         {
             time += Time.deltaTime;
+        }
+        notSousaTime += Time.deltaTime;
+        if(Input.anyKey || Input.GetMouseButtonDown(0))
+        {
+            notSousaTime = 0f;
+        }
+        if(notSousaTime >= 60f)
+        {
+            Application.Quit();
         }
     }
     public void StartGame()

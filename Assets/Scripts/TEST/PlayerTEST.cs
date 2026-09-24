@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
     bool notUseStateStore;
     public Action onwin, onlose;
     public GameObject bullettarget;
+    public Vector3 correction = new Vector3(0,0,3);
 
     void Start()
     {
@@ -184,6 +185,7 @@ public class Player : MonoBehaviour
         }
 
         Vector3 direction = bullettarget.transform.forward;
+        direction += correction;
 
         GameObject shell = Instantiate(
             bullet,
